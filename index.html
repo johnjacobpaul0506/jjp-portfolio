@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>John Jacob Paul — Digital Construction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #0d1117;
+      --navy2:     #111827;
+      --navy3:     #1a2332;
+      --card:      #151f2e;
+      --card2:     #1e2d42;
+      --border:    #1e3a5f;
+      --border2:   #243650;
+      --teal:      #4ecca3;
+      --teal-dim:  #2aaa80;
+      --teal-faint:#1a5c47;
+      --purple:    #7c5cbf;
+      --text:      #e8edf5;
+      --text-dim:  #7a90a8;
+      --text-faint:#3a5068;
+      --sans:  'Space Grotesk', sans-serif;
+      --body:  'Inter', sans-serif;
+      --mono:  'Libre Franklin', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 24px;
+      height: 60px;
+      transition: background .4s, backdrop-filter .4s, border-color .4s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(13,17,23,.88);
+      backdrop-filter: blur(16px);
+      border-color: var(--border);
+    }
+    .nav-links {
+      display: flex; align-items: stretch; gap: 0;
+      list-style: none;
+      height: 100%;
+    }
+    .nav-links li { display: flex; align-items: center; }
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-family: var(--body);
+      font-size: 12px; font-weight: 500;
+      padding: 0 16px;
+      height: 60px;
+      display: flex; align-items: center;
+      border-bottom: 2px solid transparent;
+      transition: color .2s, border-color .2s;
+      letter-spacing: .01em;
+    }
+    .nav-links a:hover { color: var(--teal); border-bottom-color: var(--teal); }
+    .nav-links a.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center;
+    }
+
+    .hero-bg-glow {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 30% 40%, rgba(78,204,163,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(124,92,191,0.05) 0%, transparent 55%),
+        linear-gradient(180deg, #0d1117 0%, #111827 60%, #0a1628 100%);
+    }
+
+    #starCanvas {
+      position: absolute; inset: 0; z-index: 1;
+      width: 100%; height: 100%;
+    }
+
+   #cityCanvas {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 55%;
+      height: 55%;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    .hero-content {
+      position: relative; z-index: 10;
+      padding: 60px 40px 0 40px;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .hero-heading {
+      font-family: var(--sans);
+      font-size: clamp(24px, 5.5vw, 64px);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-heading .name {
+      background: linear-gradient(90deg, #4ecca3 0%, #a8f0da 55%, #e8edf5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      white-space: nowrap;
+    }
+
+    .hero-sub {
+      font-family: var(--mono);
+      font-size: clamp(12px, 1.6vw, 15px);
+      color: var(--text-dim);
+      margin-bottom: 40px;
+      opacity: 0; animation: fadeUp .6s .5s forwards;
+      line-height: 1.5;
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      z-index: 10;
+      opacity: 0; animation: fadeIn 1s 1.4s forwards;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .scroll-arrow {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(78,204,163,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: arrowBounce 2s ease-in-out infinite;
+    }
+    .scroll-arrow svg { width: 14px; height: 14px; color: var(--teal); }
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50% { transform: translateY(6px); opacity: 1; }
+    }
+
+    /* ── HERO STATS + TOOLS ── */
+    .hero-stats {
+      display: flex; align-items: center; gap: 32px;
+      margin-top: 40px; margin-bottom: 48px;
+      opacity: 0; animation: fadeUp .6s .8s forwards;
+    }
+    .hero-stat-item {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .hero-stat-item + .hero-stat-item {
+      padding-left: 32px;
+      border-left: 1px solid var(--border2);
+    }
+    .hero-stat-number {
+      font-family: var(--sans); font-size: 28px; font-weight: 700;
+      color: var(--teal); line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 10px; color: var(--text-faint);
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+
+    .hero-tools-strip {
+      opacity: 0; animation: fadeUp .6s 1s forwards;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      width: 100%;
+    }
+    .hero-tools-label {
+      font-family: var(--mono); font-size: 9px;
+      color: var(--text-faint); letter-spacing: .16em;
+      text-transform: uppercase; margin-bottom: 12px;
+      display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .tools-hint {
+      text-transform: none;
+      letter-spacing: normal;
+      font-family: var(--body);
+      color: var(--teal-dim);
+      font-size: 11px;
+    }
+    .hero-tools-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      max-width: 850px;
+    }
+    .tool-badge {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 18px;
+      gap: 15px;
+      height: 78px;
+      width: 192px;
+      background: rgba(26,35,50,0.8);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      transition: border-color .2s, background .2s, transform .2s;
+      cursor: pointer;
+    }
+    .tool-badge:hover {
+      border-color: rgba(78,204,163,0.3);
+      background: rgba(78,204,163,0.06);
+      transform: translateY(-2px);
+    }
+    .tool-badge svg, .tool-badge img {
+      width: 45px; height: 45px;
+      flex-shrink: 0;
+      object-fit: contain;
+      transition: transform 0.22s ease;
+    }
+    .tool-badge:hover svg, .tool-badge:hover img {
+      transform: scale(1.14);
+    }
+   .tool-badge-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── POPUP MODALS ── */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1; pointer-events: auto;
+    }
+    .modal-content {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 24px;
+      width: 90%; max-width: 540px; 
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    }
+    #workModal .modal-content {
+      max-width: 880px; /* Wider view for video popups */
+    }
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+    .modal-close {
+      position: absolute; top: 12px; right: 16px;
+      background: transparent; border: none;
+      color: var(--text-dim); font-size: 24px;
+      line-height: 1;
+      cursor: pointer; transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--teal); }
+    .modal-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+      border-bottom: 1px solid var(--border2); padding-bottom: 12px;
+    }
+    .modal-header img, .modal-header svg {
+      width: 32px; height: 32px; border-radius: 4px;
+    }
+    .modal-header-text {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .modal-title {
+      font-family: var(--sans); font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.1;
+    }
+    .modal-rating {
+      color: #f5d222; font-size: 14px; letter-spacing: 2px;
+    }
+    .modal-rating .empty {
+      color: var(--border2);
+    }
+    .modal-body p {
+      color: var(--text-dim); font-size: 13px; line-height: 1.6; margin-bottom: 16px;
+    }
+
+    .modal-video-container {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border2);
+    }
+    .modal-video-container video {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ── SECTIONS ── */
+    section:not(#hero) { padding: 80px 40px; }
+
+    .section-eyebrow {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--teal); letter-spacing: .18em;
+      text-transform: uppercase; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--teal); }
+    .section-title {
+      font-family: var(--sans); font-weight: 700;
+      font-size: clamp(24px, 3.5vw, 42px); line-height: 1.1;
+      color: var(--text); margin-bottom: 48px;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--navy2); border-top: 1px solid var(--border); }
+    .about-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 56px; align-items: start; }
+    .about-body p {
+      color: var(--text-dim); font-size: 14px; line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .about-body p strong { color: var(--text); font-weight: 600; }
+    .about-cards { display: flex; flex-direction: column; gap: 2px; }
+    .about-card {
+      background: rgba(21,31,46,0.55) padding-box,
+                  linear-gradient(135deg, rgba(78,204,163,0.2), transparent 55%) border-box;
+      border: 1px solid transparent;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 20px; border-radius: 2px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .about-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(78,204,163,0.07); }
+    .about-card-num {
+      font-family: var(--sans); font-size: 28px; font-weight: 700;
+      color: var(--teal); line-height: 1; margin-bottom: 4px;
+    }
+    .about-card-label { font-size: 11px; color: var(--text-dim); letter-spacing: .06em; }
+
+    /* ── DIGITAL CAPABILITY ── */
+    #skills { background: var(--navy); border-top: 1px solid var(--border); }
+    .capability-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .capability-card {
+      background: rgba(21,31,46,0.55) padding-box,
+                  linear-gradient(135deg, rgba(78,204,163,0.3), transparent 60%) border-box;
+      border: 1px solid transparent;
+      border-left: 3px solid var(--teal);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 24px;
+      border-radius: 8px;
+      transition: transform .3s, box-shadow .3s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+    .capability-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(78,204,163,0.08);
+    }
+    .capability-title {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .capability-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--teal);
+      letter-spacing: 0.1em;
+    }
+    .btn-view-work {
+      align-self: flex-start;
+      margin-top: 12px;
+      background: var(--teal);
+      border: none;
+      color: #0d1117;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 0 0 rgba(78,204,163,0.5);
+      animation: viewWorkPulse 2.8s ease-in-out infinite;
+    }
+    .btn-view-work::before {
+      content: '▶';
+      font-size: 8px;
+      line-height: 1;
+    }
+    .btn-view-work:hover {
+      background: #5fddbb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(78,204,163,0.35);
+      animation: none;
+    }
+    @keyframes viewWorkPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(78,204,163,0.45); }
+      60% { box-shadow: 0 0 0 7px rgba(78,204,163,0); }
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--navy2); border-top: 1px solid var(--border); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .project-card {
+      background: rgba(21,31,46,0.55) padding-box,
+                  linear-gradient(135deg, rgba(78,204,163,0.25), transparent 60%) border-box;
+      border: 1px solid transparent;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(78,204,163,0.08);
+    }
+    .project-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .project-title {
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center; 
+      gap: 12px;
+    }
+    .project-val {
+      font-family: var(--mono);
+      font-size: 16px; 
+      color: var(--teal);
+      font-weight: 600; 
+      white-space: nowrap;
+    }
+    .project-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: 10px; color: var(--teal-dim);
+      background: rgba(78,204,163,0.08);
+      border: 1px solid rgba(78,204,163,0.15);
+      padding: 3px 10px; border-radius: 20px;
+      letter-spacing: .04em;
+    }
+    
+    .project-media {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 6px;
+      border: 1px solid var(--border2);
+      overflow: hidden;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .project-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,17,23,0.72) 0%, transparent 52%);
+      pointer-events: none;
+      border-radius: 6px;
+      z-index: 1;
+    }
+    .project-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+    .project-card:hover .project-media video {
+      opacity: 1;
+    }
+
+    /* ── CAREER SUMMARY / TIMELINE ── */
+    #career { background: var(--navy); border-top: 1px solid var(--border); }
+    .timeline-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .timeline-headers {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-header {
+      width: 50%;
+      font-family: var(--mono);
+      color: var(--teal-dim);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .timeline-header.left { text-align: right; padding-right: 40px; }
+    .timeline-header.right { text-align: left; padding-left: 40px; }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding: 0 0 20px 0;
+    }
+    .timeline::before {
+      content: ''; position: absolute; left: 50%; top: -10px; bottom: 0;
+      width: 2px; background: var(--border2); transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      width: 50%;
+      position: relative;
+      margin-bottom: 40px;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-item.experience { align-self: flex-start; text-align: right; padding: 0 40px 0 0; }
+    .timeline-item.experience .timeline-dot { right: -8px; }
+
+    .timeline-item.education { align-self: flex-end; text-align: left; padding: 0 0 0 40px; }
+    .timeline-item.education .timeline-dot { left: -8px; }
+
+    .timeline-dot {
+      position: absolute; top: 6px; width: 14px; height: 14px;
+      border-radius: 50%; background: var(--navy); border: 3px solid var(--teal);
+      z-index: 2;
+    }
+
+    .timeline-content {
+      background: rgba(21,31,46,0.55) padding-box,
+                  linear-gradient(135deg, rgba(78,204,163,0.2), transparent 55%) border-box;
+      border: 1px solid transparent;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 20px 24px; border-radius: 6px;
+      display: inline-block; width: 100%;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      cursor: pointer;
+    }
+    .timeline-content:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(78,204,163,0.07); }
+    
+    .timeline-date {
+      font-family: var(--mono); color: var(--teal); font-size: 11px; margin-bottom: 6px; display: block;
+    }
+    .timeline-title {
+      font-family: var(--sans); color: var(--text); font-size: 15px; font-weight: 600; line-height: 1.3;
+    }
+    .timeline-org {
+      color: var(--text-dim); font-size: 13px; margin-top: 4px;
+    }
+
+    /* ── CONNECT ── */
+    #connect { background: var(--navy2); border-top: 1px solid var(--border); }
+    .connect-intro { 
+      font-size: 14px; color: var(--text-dim); line-height: 1.7; 
+      margin-bottom: 40px; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;
+    }
+    .connect-links { 
+      display: flex; flex-direction: column; gap: 2px; 
+      max-width: 400px; margin: 0 auto;
+    }
+    .connect-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      background: var(--card); border: 1px solid var(--border2);
+      color: var(--text-dim); text-decoration: none;
+      font-size: 12px; font-weight: 500;
+      transition: border-color .2s, color .2s, padding-left .2s;
+    }
+    .connect-link:hover { border-color: var(--teal-faint); color: var(--teal); padding-left: 28px; }
+    .connect-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--navy);
+    }
+    .footer-name { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--text-dim); }
+    .footer-copy { font-size: 11px; color: var(--text-faint); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(24px); transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    /* ── RESPONSIVE OVERRIDES ── */
+    @media (max-width: 1024px) {
+      .hero-content { padding: 40px; }
+      section:not(#hero) { padding: 60px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    @media (max-width: 768px) {
+      /* Mobile General Font Reductions */
+      body { font-size: 13px; }
+      
+      nav { padding: 0 24px; } /* Increased gap from the sides */
+      .nav-links { overflow-x: visible; justify-content: space-between; gap: 6px; padding: 0; width: 100%; display: flex; }
+      .nav-links a { 
+        padding: 0; 
+        font-size: 10px; 
+        text-align: center; 
+        justify-content: center; 
+        line-height: 1.3; 
+        white-space: normal; 
+        flex: 1;
+        display: flex;
+        align-items: center;
+      }
+      
+      /* Fix for sticky hover on mobile causing double highlights */
+      .nav-links a:hover:not(.active) {
+        color: var(--text-dim);
+        border-bottom-color: transparent;
+      }
+
+      .hero-heading { font-size: clamp(24px, 10vw, 42px); }
+      .hero-stats { gap: 20px; flex-direction: column; align-items: flex-start; margin-bottom: 24px; }
+      .hero-stat-item + .hero-stat-item { padding-left: 0; border-left: none; border-top: 1px solid var(--border2); padding-top: 20px; width: 100%; }
+      .hero-stat-number { font-size: 12px; }
+
+      /* Bring City Canvas up and heavily blend the bottom sharp line */
+      #cityCanvas {
+        bottom: 59%;
+        opacity: 0.35;
+        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 95%);
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 95%);
+      }
+
+      /* Mobile Spacing Fix: Move "Hi I'm..." down */
+      #hero { align-items: flex-start; flex-direction: column; }
+      .hero-content { padding: 110px 24px 15px 24px; }
+      
+      .hero-scroll {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin: 10px auto 40px auto;
+      }
+
+      /* About Section Mobile Reductions */
+      .about-body p { font-size: 13px; line-height: 1.6; }
+      .about-card { padding: 15px; }
+      .about-card-num { font-size: 22px; }
+      .about-card-label { font-size: 10px; }
+
+      /* Digital Capability Mobile Reductions */
+      .capability-grid, .projects-grid { grid-template-columns: 1fr; gap: 16px; }
+      .capability-card { padding: 20px; }
+      .capability-title { font-size: 14px; }
+      .capability-tag { font-size: 8px; }
+      .btn-view-work { font-size: 9px; padding: 6px 10px; }
+
+      /* Hero Tools Mobile Reductions: Scaled down 50% */
+      .hero-tools-row { justify-content: flex-start; max-width: 100%; gap: 6px; }
+      .tool-badge { 
+        width: calc(16.66% - 5px); 
+        height: auto; 
+        aspect-ratio: 1; 
+        flex-direction: column; 
+        justify-content: center; 
+        padding: 4px; 
+        gap: 3px; 
+      }
+      .tool-badge svg, .tool-badge img { width: 19px; height: 19px; }
+      .tool-badge-name { font-size: 6px; text-align: center; white-space: normal; line-height: 1.1; }
+
+      /* Timeline Mobile Reductions */
+      .timeline-headers { display: none; }
+      .timeline::before { left: 20px; transform: none; }
+      .timeline-item { width: 100%; text-align: left !important; padding: 0 0 32px 45px !important; margin-left: 0 !important; }
+      .timeline-dot { left: 13px !important; right: auto !important; width: 12px; height: 12px; top: 4px; }
+      .timeline-content { padding: 16px 20px; }
+      .timeline-title { font-size: 14px; }
+      .timeline-org { font-size: 12px; }
+      
+      .modal-content { padding: 20px; width: 95%; }
+      .modal-title { font-size: 16px; }
+      
+      footer { padding: 24px 20px; flex-direction: column; gap: 10px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-heading { font-size: clamp(22px, 9vw, 36px); }
+      .hero-content { padding-left: 20px; padding-right: 20px; }
+      .section-title { font-size: 26px; margin-bottom: 32px; }
+      section:not(#hero) { padding: 40px 16px; }
+      .project-title { font-size: 15px; }
+      .project-val { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Digital Capability</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#career">Career Summary</a></li>
+	  <li><a href="#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg-glow"></div>
+    <canvas id="starCanvas"></canvas>
+    <canvas id="cityCanvas"></canvas>
+
+    <div class="hero-content">
+      <h1 class="hero-heading">
+        Hi, I'm <span class="name">John Jacob Paul,</span>
+      </h1>
+      <p class="hero-sub">and I'm a Digital Construction Engineer.</p>
+      
+      <!-- STATS -->
+      <div class="hero-stats">
+        <div class="hero-stat-item">
+          <span class="hero-stat-number">7 Years in Construction</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-number">Digital Delivery</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-number">Design & Project Coordination</span>
+        </div>
+      </div>
+
+      <!-- TOOLS -->
+      <div class="hero-tools-strip">
+        <p class="hero-tools-label">CORE ECOSYSTEM <span class="tools-hint">(Tap badges for more info)</span></p>
+        <div class="hero-tools-row">
+          
+          <!-- Row 1 -->
+          <div class="tool-badge" data-rating="5" data-desc="Over the past four years, I have used Revizto+ on a daily basis to lead the digital delivery of a project from early design through to construction handover. Revizto was established as the central hub for all model coordination, enabling collaboration and communication on issues ranging from hard clashes to visual compliance checks.<br><br>The boundaries of traditional model usage were pushed by extending Revizto's 3D capabilities to site supervisors through in-house training and purpose-built appearance templates, driving adoption at the coalface of construction. The platform is also utilised for quantity takeoff, further embedding it into day-to-day delivery workflows.<br><br>Beyond project work, I have delivered multiple guest lectures at the University of Adelaide on the practical application of Revizto in construction, and presented at a Revizto Field Day in Adelaide.">
+            <img src="logos/revizto.png" alt="Revizto"/>
+            <span class="tool-badge-name">Revizto</span>
+          </div>
+          <div class="tool-badge" data-rating="3" data-desc="Given the nature of my current role, I primarily use Revit as a coordination and audit platform rather than a modelling tool. Discipline models are managed and audited through container files, enabling oversight of interdisciplinary federated models to support better coordination outcomes. Combined first fix plans, reflected ceiling plans, and wall penetration plans are generated within the container file to facilitate services coordination across trades.<br><br>I possess a solid working knowledge of Revit coordinate systems to ensure models are correctly positioned and aligned for federation. While the focus remains on managing and interrogating interdisciplinary Revit models, I still venture into modelling within Revit as required, including temporary works and logistics planning.">
+            <img src="logos/revit.png" alt="Revit"/>
+            <span class="tool-badge-name">Revit</span>
+          </div>
+          <div class="tool-badge" data-rating="4" data-desc="Autodesk Construction Cloud (ACC) is used on a daily basis to manage cloud worksharing across multiple Revit models, coordinating access and publishing workflows for the wider project team. Models are configured and maintained within ACC to ensure disciplines are working on current and correctly linked files at all times.">
+            <img src="logos/acc.png" alt="ACC" style="background:white;padding:2px;border-radius:2px;"/>
+            <span class="tool-badge-name">ACC</span>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="tool-badge" data-rating="3" data-desc="My experience in Power BI ranges from visualising and tracking quantity data extracted from Revit to monitoring issue trends exported from Revizto, providing a streamlined view of project progress over time. Custom dashboards are built to monitor the growth of quantities across design stages, enabling the team to identify trends and make informed decisions based on live data.<br><br>By connecting Revit schedule exports and Revizto issue reports into Power BI, manual reporting processes are replaced with dynamic, automatically updating visuals that reflect the current state of the project at any given point. Power BI is also used to track model health over time, monitoring key indicators to ensure models remain compliant and coordinated throughout the project lifecycle.">
+            <svg viewBox="0 0 32 32" fill="none">
+              <defs>
+                <linearGradient id="pbi-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#f5d222"/>
+                  <stop offset="100%" stop-color="#e8b800"/>
+                </linearGradient>
+              </defs>
+              <rect width="32" height="32" rx="5" fill="url(#pbi-bg)"/>
+              <rect x="7"  y="19" width="5" height="7" rx="1.2" fill="#1a1200"/>
+              <rect x="13.5" y="13" width="5" height="13" rx="1.2" fill="#1a1200"/>
+              <rect x="20" y="7"  width="5" height="19" rx="1.2" fill="#1a1200"/>
+            </svg>
+            <span class="tool-badge-name">Power BI</span>
+          </div>
+          <div class="tool-badge" data-rating="5" data-desc="Cupix is used on site as a reality capture and progress monitoring tool, enabling the team to track construction progress through 360° site walkthroughs captured at regular intervals. It also serves as a second layer check against the 3D model, allowing the team to visually verify that on-site installations are in line with the coordinated model and flagging any discrepancies before they escalate.">
+            <img src="logos/cupix.jpg" alt="Cupix"/>
+            <span class="tool-badge-name">Cupix</span>
+          </div>
+          <div class="tool-badge" data-rating="3" data-desc="Agisoft Metashape is used to process drone-captured photography into high-quality point clouds and orthomosaic outputs, providing accurate and georeferenced representations of the site at various stages of construction. These outputs are used to support site progress monitoring, earthworks verification, and broader digital survey workflows across the project.">
+            <img src="logos/metashape.png" alt="Metashape"/>
+            <span class="tool-badge-name">Metashape</span>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="tool-badge" data-rating="5" data-desc="As an experienced Bluebeam Revu user, the platform is used extensively for design review and shop drawing coordination. Studio Sessions are utilised to coordinate live reviews between the in-house design team, with overlay tools applied to compare revisions and identify changes between design iterations. ">
+            <img src="logos/bluebeam.png" alt="Bluebeam"/>
+            <span class="tool-badge-name">Bluebeam</span>
+          </div>
+          <div class="tool-badge" data-rating="5" data-desc="I use Navisworks Manage as an alternative to Revizto subject to project complexity and budget, primarily for model federation and clash detection across disciplines. I federate interdisciplinary models within Navisworks to identify and manage hard and soft clashes, supporting coordination workflows throughout the design and construction phases.">
+            <img src="logos/navisworks.png" alt="Navisworks"/>
+            <span class="tool-badge-name">Navisworks</span>
+          </div>
+          <div class="tool-badge" data-rating="1" data-desc="I am an emerging PyRevit user, currently utilising it to develop an in-house Revit add-in with custom tools tailored to the organisation's workflows. The add-in is being developed to audit multiple discipline models against the project BIM Execution Plan, streamlining the model review process and ensuring compliance with project BIM requirements across all disciplines.">
+            <img src="logos/pyrevit.jpg" alt="PyRevit"/>
+            <span class="tool-badge-name">PyRevit</span>
+          </div>
+
+          <!-- Row 4 -->
+          <div class="tool-badge" data-rating="4" data-desc="I use DroneDeploy on sites with high construction volume as a central platform to house both drone photography capturing the external progress of the building and 360 photos capturing the internal spaces. Beyond progress monitoring, I am currently pushing the boundaries of the platform by exploring its use as a centralised hub for dilapidation capture, QA inspection photography, and defect management during the liability period, consolidating what would otherwise be fragmented documentation workflows into a single accessible platform.">
+            <img src="logos/dronedeploy.png" alt="DroneDeploy"/>
+            <span class="tool-badge-name">DroneDeploy</span>
+          </div>
+          <div class="tool-badge" data-rating="5" data-desc="Aconex is used as the primary Common Data Environment (CDE) for managing project correspondence, RFIs, document transmittals, and shop drawing approval workflows across the project team.">
+            <img src="logos/aconex.png" alt="Aconex"/>
+            <span class="tool-badge-name">Aconex</span>
+          </div>
+          <div class="tool-badge" data-rating="5" data-desc="People who know me say I view the world through a spreadsheet. I couldn't agree more to this given the decade of experience I have with Excel ranging from basic formulas all the way to VBA scripting. Over the years I have created several spreadsheets that automate tasks such as bulk renaming files, auto-populating Aconex metadata fields, and dynamically generating transmittal registers that track document revision histories across multiple disciplines.">
+            <img src="logos/excel.png" alt="Excel Advanced"/>
+            <span class="tool-badge-name">Excel<br>Advanced</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-arrow">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid reveal">
+      <div class="about-body">
+        <p class="section-eyebrow">About</p>
+        <h2 class="section-title">Civil Engineering<br>meets Digital.</h2>
+        <p>I have a background in <strong>Civil Engineering and Construction Management</strong>, with a strong focus on digital coordination and construction technology. Based in South Australia, I currently work at Sarah Constructions where I manage digital delivery across the full project lifecycle — from early design through to construction.</p>
+        <p>I leverage technical expertise in <strong>Revizto, Revit, Navisworks, Autodesk Construction Cloud, and Bluebeam</strong> to structure workflows that streamline collaboration and proactively identify issues before they reach site — from shop detailing of steel structures to leading building services coordination.</p>
+        <p>My work extends into <strong>spatial validation</strong> using Cupix and drone-captured point clouds to align site conditions with design intent, as well as <strong>model data analytics</strong> via Revizto, Autodesk Data Exchange, and Power BI to enable predictive analysis and data-driven decision making.</p>
+      </div>
+      <div class="about-cards">
+        <div class="about-card"><div class="about-card-num">5+ Years </div><div class="about-card-label">in Digital Delivery, Design Management and Project Coordination in Australia</div></div>
+        <div class="about-card"><div class="about-card-num">2 Years</div><div class="about-card-label">Overseas Experience in prefabricated high rise Construction</div></div>
+        <div class="about-card"><div class="about-card-num">Guest Lecturer</div><div class="about-card-label">Guest Lecturer, Adelaide University</div></div>
+        <div class="about-card"><div class="about-card-num">Construction Management</div><div class="about-card-label">Masters Degree from Adelaide University</div></div>
+		<div class="about-card"><div class="about-card-num">Civil Engineering</div><div class="about-card-label">Bachelors Degree from National Institute of Technology (India)</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIGITAL CAPABILITY -->
+  <section id="skills">
+    <div class="reveal">
+      <p class="section-eyebrow">Digital Capability</p>
+      <h2 class="section-title">Professional Expertise</h2>
+    </div>
+    
+    <div class="capability-grid reveal">
+      <div class="capability-card">
+        <div class="capability-tag">Framework</div>
+        <h3 class="capability-title">Digital Delivery in accordance with ISO19650</h3>
+        <p style="font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 4px;">Structuring and managing project information, BIM Execution Plans, and Common Data Environments (CDE) in strict alignment with ISO 19650 standards.</p>
+      </div>
+      <div class="capability-card">
+        <div class="capability-tag">Management</div>
+        <h3 class="capability-title">Design & Project Coordination</h3>
+        <p style="font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 4px;">Hands-on experience in design coordination during both the design and construction phases, leveraging 3D models and Bluebeam.</p>
+      </div>
+      <div class="capability-card">
+        <div class="capability-tag">Detailed Design</div>
+        <h3 class="capability-title">Structural Detailing Concurrent to Design Development</h3>
+        <p style="font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 4px;">Integrating shop detailing workflows early in the design phase to reduce the overall program duration. The process is meticulously planned to ensure no scope gaps or design changes result in rework — working closely with the structural detailer and consultants to ensure cross-discipline coordination. The output at the end of the design phase is a structural steel model detailed to LOD400 and ready for fabrication, with architectural section details that reflect the actual build condition.</p>
+      </div>
+      <div class="capability-card">
+        <div class="capability-tag">Services Coordination</div>
+        <h3 class="capability-title">Lead Services Coordination</h3>
+        <p style="font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 4px;">Leading mechanical, electrical, hydraulic, and fire services coordination to produce a fully coordinated and compliant model. A BIM Management Plan is agreed with the subcontractor upfront, detailing the coordination process and clash responsibility matrix. Revizto is used to automate clash tests and streamline issue assignment, with regular virtual inspections to catch what automated detection misses. Hangers are modelled where project complexity demands it for enhanced coordination outcomes.</p>
+      </div>
+      <div class="capability-card">
+        <div class="capability-tag">Analytics</div>
+        <h3 class="capability-title">3D Model Analytics & Insights</h3>
+        <button class="btn-view-work" data-work-title="3D Model Analytics" data-work-desc="The metadata behind the 3D model and the issue status from Revizto is exported out on a weekly basis which is automatically loaded into PowerBI. The PowerBI dashboard is setup to audit and analyze items such as Model Publish to Revizto Date, Issue Status, Clash Report, Model Growth Tracking etc. The video below shows the different items that we are tracking using PowerBI. " data-video-src="capability/powerbi.mp4">Watch Demo</button>
+      </div>
+      <div class="capability-card">
+        <div class="capability-tag">Cost Estimation</div>
+        <h3 class="capability-title">Quantity Takeoffs</h3>
+        <button class="btn-view-work" data-work-title="Quantity Takeoffs" data-work-desc="Quantities are exported either from Revit or Revizto (using a combination of search sets, presets and favorite properties). These are then exported out as an excel file for further use. When required, the export file is loaded to PowerBI and exporting is undertaken on a weekly basis to monitor the change in model quantities. The video below shows how structural quantities are exported from Revizto and loaded into PowerBI giving the end user the ability to select a project and get the associated Bill of Materials." data-video-src="capability/qto.mp4">Watch Demo</button>
+      </div>
+      <div class="capability-card">
+        <div class="capability-tag">Automation</div>
+        <h3 class="capability-title">Revit Auditing & Automation using PyRevit</h3>
+        <button class="btn-view-work" data-work-title="Revit Automation" data-work-desc="Recently developed a Revit Addin for the organization using PyRevit. The tools within the addin are focused to audit the discipline models using a python script. The export is either a csv/xlsx that is loaded to PowerBI for developing dashboards. In addition to auditing, there are also tools developed for data exchange that will allow user to export properties and also write values to a shared parameter field from an excel file. Some of the tools within the addin are also developed leveraging AI-assisted scripting to accelerate development." data-video-src="capability/pyrevit.mp4">Watch Demo</button>
+      </div>
+      <div class="capability-card">
+        <div class="capability-tag">Reality Capture</div>
+        <h3 class="capability-title">Reality Capture using Drones & 360 Cameras</h3>
+        <button class="btn-view-work" data-work-title="Reality Capture" data-work-desc="My experience with Reality Captures ranges from drone mapping to 360 image captures. Drone flight is undertaken (in accordance with CASA regulations) over the project site and the photos are converted to a georeferenced point cloud and an orthomosaic using Agisoft Metashape. Further, for the interior of the building a 360 camera is used alongside Cupix/DroneDeploy to capture the progress on site. The video below shows I have used drone captures and 360 cameras for as built validation." data-video-src="capability/realitycapture.mp4">Watch Demo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="reveal">
+      <p class="section-eyebrow">Projects</p>
+      <h2 class="section-title">Projects Delivered with Sarah Constructions</h2>
+    </div>
+    
+    <div class="projects-grid reveal">
+      <div class="project-card">
+        <div class="project-content">
+          <div class="project-title">2025 - Present | New Northern Suburbs High Schools <span class="project-val">$155M</span></div>
+          <div class="project-media">
+            <video autoplay loop muted playsinline poster="placeholder1.jpg">
+              <source src="projects/nnshs.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="project-desc">This is the ongoing superschool project in the northern suburbs of South Australia comprising of 4 learning centres, gym, admin centre, cultural building and a significant area of landscape and play areas. Revizto was setup in the design for coordination and collaboration between the contractor and consultants. The Digital Delivery component of this project required compliance with ISO19650 and Project Specific BIM Brief developed by the Department of Infrastructure & Transport. The design models were developed to LOD 300 making it quite reliable for Quantity Takeoffs to great extent. As the lead managing the Digital Delivery process throughout construction phase, we also setup a Revit container file to host all the discipline Revit models. To automate the process of auditing against the BIM Execution Plan, custom scripting using PyRevit was utilized to ensure consistency in grid/level alignment across the various models. PowerBI dashboards have also been setup for the job to monitor changes to the model throughout construction phase.</p>
+          <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural & Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Automated Revit Model Audits</span><span class="tag">Reality Capture</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-content">
+          <div class="project-title">2024 - 2025 | Cultural Institutions Collections Storage <span class="project-val">$65M</span></div>
+          <div class="project-media">
+            <video autoplay loop muted playsinline poster="placeholder2.jpg">
+              <source src="projects/cics.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="project-desc">The Cultural Institutions Collections Storage is an industrial building that houses artifacts of cultural and historical significance to South Australia. The end users of this building are History Trust, SA Museum, Department of Premier and Cabinet and SA Library. The structural detailing of this job was completed in parallel with design development to minimize program risk. This process was so meticulously planned to ensure that steel connections were carefully coordinated with the deltacore slab. For instance, all secondary steel connections to deltacore slab can only be into the cores. To facilitate the process, deltacore slab was also modelled with all the voids. Further, as part of services coordination all hangers including seismic were modelled for services and coordinated with the voids of deltacore slab. In addition to the detailed coordination within Revizto, we also utilized Cupix on the job to track progress on site and also add as a secondary layer of validation to ensure installation is in alignment with model. </p>
+          <div class="project-tags"><span class="tag">Industrial</span><span class="tag">Design Coordination</span><span class="tag">Structural Detailing in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Cupix</span><span class="tag">Deltacore Slab</span><span class="tag">ACC Cloud Worksharing</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-content">
+          <div class="project-title">2023 - 2024 | ANI Towers & Office Building <span class="project-val">$45M</span></div>
+          <div class="project-media">
+            <video autoplay loop muted playsinline poster="placeholder3.jpg">
+              <source src="projects/anifmt.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="project-desc">
+Our client Australian Naval Infrastructure required a 6 storey office building and also a series of fixed and mobile towers to facilitate the bigger ship building process. The towers were the most complex in nature given the fact that we couldn't disrupt the works and as such had to be constructed offsite and transported to the facility. The offsite construction again resulted in precision detailing and coordination noting it had minimal flexibility to accommodate changes or "Fix it on site" measures. As such, each fixing point was identified and holes were predrilled in factory. Given that we had to connect this with an existing structure and it's associated services infrastructure, a point cloud scan using a terrestrial scanner was undertaken to facilitate the process. Revizto once again aided us throughout the process and it's capability to house a georeferenced point cloud along with the 3D models assisted the team greatly with coordination process. A 4D simulation (using TwinMotion) was also created to assist the stakeholders visualise the offsite construction and transportation process.</p>
+          <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural Detialining in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Lead Services Coordination</span><span class="tag">4D Simulation for Logistics Planning</span><span class="tag">Modular Construction</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-content">
+          <div class="project-title">2023 - 2024 | Riverlea Retail Centre | ECI Phase<span class="project-val">$40M</span></div>
+          <div class="project-media">
+            <video autoplay loop muted playsinline poster="placeholder4.jpg">
+              <source src="projects/riverlea.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="project-desc">We were awarded the ECI contract for the Riverlea Retail Centre project that comprises of a series of buildings including retail shops, supermarket, childcare centre, gym and medical centre. As the ECI contractor we were responsible for design coordinating the job and also completing the structural shop drawing process concurrent with design development. We utilized Revizto as the primary coordination platform and also utilized the experience to minimize structural scope gaps and detailed level of coordination with architectural elements. Given the amount of design changes that came through during the ECI phase we also established a PowerBI dashboard that monitored the increase/decrease in major quantities (Eg. Steel tonnage, pipe run length). This dashboard helped us to justify any cost uplift that resulted as part of design changes.</p>
+          <div class="project-tags"><span class="tag">Retail</span><span class="tag">Design Coordination</span><span class="tag">Structural Detailing in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-content">
+          <div class="project-title">2022 - 2023 | Morialta Secondary School <span class="project-val">$90M</span></div>
+          <div class="project-media">
+            <video autoplay loop muted playsinline poster="placeholder5.jpg">
+              <source src="projects/morialta.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="project-desc">Morialta Secondary School was an educational precinct comprising of two educational facilities, a gym and an admin centre. This was the first project where we established the lead services coordination role within the company in lieu of tasking this with the subcontractor team. To streamline the coordination process a BIM Execution Plan was established with a solid clash responsibility matrix. Using the logic of the clash matrix we setup our search sets and clash test sets in Revizto and utilized the advanced automation feature to ensure that clashes are assigned to the responsible party in alignment with the clash matrix. This enhanced the clash detection process and the whole clash run was automated to a great extent. In addition to just identifying hard clashes, we also added virtual inspection to our workflow that let's the user to identify issues that typically cannot be captured using the clash detection process. At the end of the job we analysed the total issues that were rectified upfront and found that hard clash detection only picks up 70-80% of the issues and the remaining can only be identified using virtual inspection.</p>
+          <div class="project-tags"><span class="tag">Education</span><span class="tag">Lead Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">ACC Cloud Worksharing</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-content">
+          <div class="project-title">2021 - 2022 | Modular Education Projects <span class="project-val">$40M+</span></div>
+          <div class="project-media">
+            <video autoplay loop muted playsinline poster="placeholder6.jpg">
+              <source src="projects/modular.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="project-desc">The modular education projects comprised of a series of school projects as part of the government's accelerated school building program. The key projects I was involved with were Mitcham Primary School, Marryatville Primary School, Victor Harbor Primary School, Gladstone Primary School, Mitcham Primary School and Mawson Lakes Primary School. As the name suggests the project utilized modular or offsite construction techniques to ensure minimal disruption to school operational hours. Given the nature of construction, detailed coordination was required from the design phase through to construction in a controlled environment and assembled on site. Navisworks Manage was used as the primary collaboration platform for clash detection and virtual inspection. Additionally, a Virtual Walkthrough session (with VR headset)was organised for the school principal and students, providing them with an immersive preview of the completed facility ahead of construction completion.</p>
+          <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural & Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Navisworks</span><span class="tag">Revit & IFC Files</span><span class="tag">Model QTO</span><span class="tag">Modular Construction</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAREER SUMMARY -->
+  <section id="career">
+    <div class="reveal">
+      <p class="section-eyebrow">Career Summary</p>
+      <h2 class="section-title" style="margin-bottom: 8px;">Experience &amp; Education</h2>
+      <p style="font-family: var(--body); color: var(--teal-dim); font-size: 12px; margin-bottom: 40px;">(Tap on the cards to know more about my experience)</p>
+    </div>
+    
+    <div class="timeline-container reveal">
+      <div class="timeline-headers">
+        <div class="timeline-header left">Experience (7 Years)</div>
+        <div class="timeline-header right">Education (6 Years)</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item experience">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content" data-desc="My career in Digital Construction commenced at Sarah Constructions where I joined as a Site Assistant while I was in my final year of University. The role was subsequently transitioned into a graduate role upon completion of my studies and I was the winner of the Sarah Graduate Scholarship Grant. My role in the Digital Division of the company over the last 5 years involved pushing the status quo and testing and embracing emerging technology as deemed fit. The Digital Coordinator role is also not purely focused on BIM Workflows, rather it branches out and integrates into Design Management and Construction Coordination. This enhanced my knowledge within the construction space and gave me the perspective to view things in the big picture rather than purely a BIM oriented workflow. My experience started from knowing nothing about Digital Construction and I am currently working as a Senior Digital Coordinator managing digital workflows in both design and construction phases, maintaining BIM Execution Plans, developing automations, and conducting R&D into emerging technology.">
+            <span class="timeline-date">2021 — Present</span>
+            <div class="timeline-title">Senior Digital Coordinator</div>
+            <div class="timeline-org">Sarah Constructions</div>
+          </div>
+        </div>
+        <div class="timeline-item experience">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content" data-desc="I've had a continued relationship with the University of Adelaide (now Adelaide University) even after completing my Masters Degree in Construction Management. Immediately after completion of my degree, I was offered a role as Teaching Demonstrator for the course Building Services & Environment where I assisted the professor to bridge the gap between theoretical and practical knowledge. This offer was awarded to me in recognition of the work I have been doing at Sarah Constructions. Further down the lane, I have been invited by the University to deliver guest lectures on topics revolving around Digital Construction.">
+            <span class="timeline-date">2021 — Present</span>
+            <div class="timeline-title">Guest Lecturer</div>
+            <div class="timeline-org">Adelaide University</div>
+          </div>
+        </div>
+        <div class="timeline-item education">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content" data-desc="Masters degree from the University of Adelaide.">
+            <span class="timeline-date">2019 — 2021</span>
+            <div class="timeline-title">Masters in Construction Management</div>
+            <div class="timeline-org">University of Adelaide</div>
+          </div>
+        </div>
+        <div class="timeline-item experience">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content" data-desc="Managed high-rise development planning in India.">
+            <span class="timeline-date">2017 — 2019</span>
+            <div class="timeline-title">Project Planning Engineer</div>
+            <div class="timeline-org">Sobha Limited (India)</div>
+          </div>
+        </div>
+        <div class="timeline-item education">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content" data-desc="Bachelors degree from NIT India.">
+            <span class="timeline-date">2013 — 2017</span>
+            <div class="timeline-title">Bachelors in Civil Engineering</div>
+            <div class="timeline-org">NIT India</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONNECT -->
+  <section id="connect">
+    <div class="reveal">
+      <p class="section-eyebrow">Connect</p>
+      <h2 class="section-title" style="text-align: center;">Let's chat</h2>
+    </div>
+    <div class="reveal">
+        <p class="connect-intro">I'd love to hear from you regarding digital construction strategy or BIM innovation.</p>
+        <div class="connect-links">
+          <a href="mailto:johnjacobpaul@gmail.com" class="connect-link">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            Email Me
+          </a>
+          <a href="https://linkedin.com/in/johnjacobpaul" class="connect-link" target="_blank">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+    </div>
+  </section>
+
+  <!-- MODALS -->
+  <div id="toolModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('toolModal')">&times;</button>
+      <div class="modal-header">
+        <div id="toolIcon"></div>
+        <div class="modal-header-text">
+          <h3 id="toolTitle" class="modal-title"></h3>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+            <span style="font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em;">Experience Level</span>
+            <div id="toolRating" class="modal-rating"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body"><p id="toolDesc"></p></div>
+    </div>
+  </div>
+  <div id="workModal" class="modal-overlay"><div class="modal-content"><button class="modal-close" onclick="closeModal('workModal')">&times;</button><div class="modal-header"><h3 id="workTitle" class="modal-title"></h3></div><div class="modal-body"><p id="workDesc"></p><div class="modal-video-container"><video id="workVideo" controls><source src="" type="video/mp4"></video></div></div></div></div>
+  <div id="expModal" class="modal-overlay"><div class="modal-content"><button class="modal-close" onclick="closeModal('expModal')">&times;</button><div class="modal-header"><h3 id="expTitle" class="modal-title"></h3><p id="expOrg" style="color:var(--teal);font-family:var(--mono);font-size:14px;"></p></div><div class="modal-body"><p id="expDesc"></p></div></div></div>
+
+  <footer style="padding: 32px 40px; text-align: center; border-top: 1px solid var(--border); font-size: 12px;">John Jacob Paul — Digital Construction Engineer © 2026</footer>
+
+  <script>
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); const v = document.getElementById('workVideo'); if(v) v.pause(); }
+    window.onclick = function(e) { if(e.target.classList.contains('modal-overlay')) { e.target.classList.remove('active'); const v = document.getElementById('workVideo'); if(v) v.pause(); } }
+
+    document.querySelectorAll('.tool-badge').forEach(b => {
+      b.onclick = () => {
+        document.getElementById('toolTitle').innerText = b.querySelector('.tool-badge-name').innerText;
+        document.getElementById('toolDesc').innerHTML = b.dataset.desc;
+        
+        // Generate Star Rating HTML
+        const rating = parseInt(b.dataset.rating) || 0;
+        let starsHtml = '';
+        for(let i = 1; i <= 5; i++) {
+          starsHtml += i <= rating ? '★' : '<span class="empty">★</span>';
+        }
+        document.getElementById('toolRating').innerHTML = starsHtml;
+
+        const iconEl = (b.querySelector('img') || b.querySelector('svg'));
+        if(iconEl) document.getElementById('toolIcon').innerHTML = iconEl.outerHTML;
+        document.getElementById('toolModal').classList.add('active');
+      }
+    });
+
+    document.querySelectorAll('.btn-view-work').forEach(b => {
+      b.onclick = (e) => {
+        e.stopPropagation();
+        document.getElementById('workTitle').innerText = b.dataset.workTitle;
+        document.getElementById('workDesc').innerText = b.dataset.workDesc;
+        
+        const v = document.getElementById('workVideo'); 
+        const videoSrc = b.dataset.videoSrc || "";
+        v.querySelector('source').src = videoSrc; 
+        v.load();
+        
+        if (videoSrc) {
+          const playPromise = v.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => console.log("Autoplay prevented by browser:", error));
+          }
+        }
+        
+        document.getElementById('workModal').classList.add('active');
+      }
+    });
+
+    document.querySelectorAll('.timeline-content').forEach(c => {
+      c.onclick = () => {
+        document.getElementById('expTitle').innerText = c.querySelector('.timeline-title').innerText;
+        document.getElementById('expOrg').innerText = c.querySelector('.timeline-org').innerText;
+        document.getElementById('expDesc').innerText = c.dataset.desc;
+        document.getElementById('expModal').classList.add('active');
+      }
+    });
+
+    // Nav scroll tracking + active state
+    const nav = document.getElementById('nav');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = Array.from(navLinks).map(link => document.querySelector(link.getAttribute('href')));
+
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY + 100;
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+
+      sections.forEach((section, i) => {
+        if (section && section.offsetTop <= scrollPos && (section.offsetTop + section.offsetHeight) > scrollPos) {
+          navLinks.forEach(link => link.classList.remove('active'));
+          navLinks[i].classList.add('active');
+        }
+      });
+    });
+
+    const obs = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    const starCanvas = document.getElementById('starCanvas'); const sc = starCanvas.getContext('2d');
+    function resizeStar() { starCanvas.width = window.innerWidth; starCanvas.height = window.innerHeight; }
+    resizeStar(); window.addEventListener('resize', resizeStar);
+    const stars = Array.from({ length: 150 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 1.5, alpha: Math.random() * 0.6 + 0.1 }));
+    function drawStars() {
+      sc.clearRect(0, 0, starCanvas.width, starCanvas.height); sc.fillStyle = "rgba(232,237,245,0.5)";
+      stars.forEach(s => {
+        sc.beginPath(); sc.arc(s.x * starCanvas.width, s.y * starCanvas.height, s.r, 0, Math.PI * 2); sc.fill();
+        s.y -= 0.0001; if (s.y < 0) s.y = 1;
+      });
+      requestAnimationFrame(drawStars);
+    }
+    drawStars();
+
+    const city = document.getElementById('cityCanvas');
+    const cc = city.getContext('2d');
+    let cityT = 0;
+
+    function resizeCity() {
+      city.width = window.innerWidth;
+      city.height = city.parentElement.getBoundingClientRect().height * 0.55;
+    }
+    resizeCity(); window.addEventListener('resize', resizeCity);
+
+    const buildings = [
+      [0,.38,.028],[.025,.28,.022],[.044,.42,.032],[.074,.32,.02],[.092,.50,.038],
+      [.128,.36,.025],[.151,.60,.042],[.191,.40,.028],[.217,.30,.02],[.235,.48,.035],
+      [.268,.35,.022],[.288,.55,.04],[.326,.38,.025],[.349,.70,.05],[.397,.44,.03],
+      [.425,.34,.022],[.445,.52,.038],[.481,.38,.026],[.505,.62,.045],[.548,.42,.028],
+      [.574,.32,.02],[.592,.50,.036],[.626,.40,.025],[.649,.65,.048],[.695,.38,.028],
+      [.721,.28,.02],[.739,.46,.034],[.771,.36,.024],[.793,.55,.04],[.831,.42,.027],
+      [.856,.30,.02],[.874,.48,.035],[.907,.38,.024],[.929,.58,.043],[.970,.35,.025],[.993,.25,.018],
+    ];
+
+    const antennas = [.155, .352, .510, .655, .795];
+
+    function drawCity() {
+      cityT += 0.008;
+      const W = city.width, H = city.height;
+      cc.clearRect(0, 0, W, H);
+
+      buildings.forEach(([bx, bh, bw], idx) => {
+        const x = bx * W;
+        const w = bw * W;
+        const h = bh * H;
+        const y = H - h;
+
+        const bGrad = cc.createLinearGradient(x, y, x, H);
+        bGrad.addColorStop(0, 'rgba(18, 32, 52, 0.9)');
+        bGrad.addColorStop(1, 'rgba(10, 18, 30, 1)');
+        cc.fillStyle = bGrad;
+        cc.fillRect(x, y, w, h);
+
+        cc.strokeStyle = 'rgba(78, 204, 163, 0.15)';
+        cc.lineWidth = 1;
+        cc.strokeRect(x, y, w, h);
+
+        const winW = Math.max(2, w * 0.18);
+        const winH = Math.max(2, h * 0.04);
+        const cols = Math.max(1, Math.floor(w / (winW * 2.5)));
+        const rows = Math.max(1, Math.floor(h / (winH * 3)));
+        const padX = (w - cols * winW * 2.5 + winW) / 2;
+        const padY = winH * 2;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const wx = x + padX + c * winW * 2.5;
+            const wy = y + padY + r * winH * 3;
+            const seed = Math.sin(idx * 13 + r * 7 + c * 3);
+            if (seed > 0) {
+              const flicker = 0.4 + Math.sin(cityT * 1.5 + idx + r) * 0.2;
+              cc.fillStyle = seed > 0.7 ? `rgba(78, 204, 163, ${flicker})` : `rgba(200, 220, 255, ${flicker * 0.4})`;
+              cc.fillRect(wx, wy, winW, winH);
+            }
+          }
+        }
+      });
+
+      antennas.forEach(ax => {
+        const bx = ax * W;
+        const b = buildings.find(([bx2, ,bw]) => bx >= bx2 * W && bx < (bx2 + bw) * W);
+        if (!b) return;
+        const top = (1 - b[1]) * H;
+        const spireH = H * 0.1;
+        cc.strokeStyle = 'rgba(78, 204, 163, 0.4)';
+        cc.beginPath(); cc.moveTo(bx, top); cc.lineTo(bx, top - spireH); cc.stroke();
+        const blink = 0.5 + Math.sin(cityT * 3 + ax * 10) * 0.5;
+        cc.beginPath(); cc.arc(bx, top - spireH, 2, 0, Math.PI * 2);
+        cc.fillStyle = `rgba(78, 204, 163, ${Math.max(0, blink)})`;
+        cc.fill();
+      });
+
+      requestAnimationFrame(drawCity);
+    }
+    drawCity();
+  </script>
+</body>
+</html>
