@@ -364,15 +364,12 @@
       gap: 20px;
     }
     .capability-card {
-      background: rgba(21,31,46,0.55) padding-box,
-                  linear-gradient(135deg, rgba(78,204,163,0.3), transparent 60%) border-box;
-      border: 1px solid transparent;
+      background: transparent;
+      border: 1px solid rgba(78,204,163,0.2);
       border-left: 3px solid var(--teal);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       padding: 24px;
       border-radius: 8px;
-      transition: transform .3s, box-shadow .3s;
+      transition: transform .3s, box-shadow .3s, border-color .3s;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -380,7 +377,8 @@
     }
     .capability-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(78,204,163,0.08);
+      border-color: rgba(78,204,163,0.45);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.3), 0 4px 12px rgba(78,204,163,0.08);
     }
     .capability-title {
       font-family: var(--sans);
@@ -582,18 +580,30 @@
     }
 
     .timeline-content {
-      background: rgba(21,31,46,0.55) padding-box,
-                  linear-gradient(135deg, rgba(78,204,163,0.2), transparent 55%) border-box;
-      border: 1px solid transparent;
+      background: rgba(21,31,46,0.80);
+      border: 1px solid rgba(78,204,163,0.22);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       padding: 20px 24px; border-radius: 6px;
       display: inline-block; width: 100%;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: transform 0.28s cubic-bezier(.22,.68,0,1.2), box-shadow 0.28s ease, border-color 0.28s ease;
       position: relative;
       cursor: pointer;
+      box-shadow:
+        0 2px 0 rgba(0,0,0,0.4),
+        0 4px 14px rgba(0,0,0,0.35),
+        0 1px 3px rgba(78,204,163,0.05);
     }
-    .timeline-content:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(78,204,163,0.07); }
+    .timeline-content:hover {
+      transform: translateY(-5px);
+      border-color: rgba(78,204,163,0.5);
+      box-shadow:
+        0 1px 0 rgba(0,0,0,0.25),
+        0 8px 0 rgba(0,0,0,0.28),
+        0 14px 32px rgba(0,0,0,0.45),
+        0 4px 18px rgba(78,204,163,0.13),
+        inset 0 1px 0 rgba(78,204,163,0.07);
+    }
     
     .timeline-date {
       font-family: var(--mono); color: var(--teal); font-size: 11px; margin-bottom: 6px; display: block;
@@ -924,21 +934,25 @@
       <div class="capability-card">
         <div class="capability-tag">Analytics</div>
         <h3 class="capability-title">3D Model Analytics & Insights</h3>
+        <p style="font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 4px;">Model metadata and issue data from Revizto is exported weekly and automatically loaded into Power BI. The dashboard tracks model publish dates, clash status, issue resolution trends, and model growth over time — giving the team real-time project health visibility and enabling data-driven decision making.</p>
         <button class="btn-view-work" data-work-title="3D Model Analytics" data-work-desc="The metadata behind the 3D model and the issue status from Revizto is exported out on a weekly basis which is automatically loaded into PowerBI. The PowerBI dashboard is setup to audit and analyze items such as Model Publish to Revizto Date, Issue Status, Clash Report, Model Growth Tracking etc. The video below shows the different items that we are tracking using PowerBI. " data-video-src="capability/powerbi.mp4">Watch Demo</button>
       </div>
       <div class="capability-card">
         <div class="capability-tag">Cost Estimation</div>
         <h3 class="capability-title">Quantity Takeoffs</h3>
+        <p style="font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 4px;">Quantities are extracted directly from Revit or Revizto using search sets, presets, and custom properties, then exported to Excel for immediate use. Where needed, outputs are loaded into Power BI and refreshed weekly — giving estimators and project managers a live bill of materials tied directly to the 3D model.</p>
         <button class="btn-view-work" data-work-title="Quantity Takeoffs" data-work-desc="Quantities are exported either from Revit or Revizto (using a combination of search sets, presets and favorite properties). These are then exported out as an excel file for further use. When required, the export file is loaded to PowerBI and exporting is undertaken on a weekly basis to monitor the change in model quantities. The video below shows how structural quantities are exported from Revizto and loaded into PowerBI giving the end user the ability to select a project and get the associated Bill of Materials." data-video-src="capability/qto.mp4">Watch Demo</button>
       </div>
       <div class="capability-card">
         <div class="capability-tag">Automation</div>
         <h3 class="capability-title">Revit Auditing & Automation using PyRevit</h3>
+        <p style="font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 4px;">A custom PyRevit add-in built for the organisation automates model auditing — running Python scripts to validate discipline models and export results as CSV/XLSX for Power BI dashboards. The add-in also includes data exchange tools for reading and writing shared parameters from Excel, with select tools developed using AI-assisted scripting to accelerate delivery.</p>
         <button class="btn-view-work" data-work-title="Revit Automation" data-work-desc="Recently developed a Revit Addin for the organization using PyRevit. The tools within the addin are focused to audit the discipline models using a python script. The export is either a csv/xlsx that is loaded to PowerBI for developing dashboards. In addition to auditing, there are also tools developed for data exchange that will allow user to export properties and also write values to a shared parameter field from an excel file. Some of the tools within the addin are also developed leveraging AI-assisted scripting to accelerate development." data-video-src="capability/pyrevit.mp4">Watch Demo</button>
       </div>
       <div class="capability-card">
         <div class="capability-tag">Reality Capture</div>
         <h3 class="capability-title">Reality Capture using Drones & 360 Cameras</h3>
+        <p style="font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 4px;">Drone flights conducted under CASA regulations capture the site at key intervals, with imagery processed in Agisoft Metashape to produce georeferenced point clouds and orthomosaics. Interior progress is documented via 360° cameras through Cupix and DroneDeploy, enabling as-built validation against the 3D model and visual progress monitoring throughout construction.</p>
         <button class="btn-view-work" data-work-title="Reality Capture" data-work-desc="My experience with Reality Captures ranges from drone mapping to 360 image captures. Drone flight is undertaken (in accordance with CASA regulations) over the project site and the photos are converted to a georeferenced point cloud and an orthomosaic using Agisoft Metashape. Further, for the interior of the building a 360 camera is used alongside Cupix/DroneDeploy to capture the progress on site. The video below shows I have used drone captures and 360 cameras for as built validation." data-video-src="capability/realitycapture.mp4">Watch Demo</button>
       </div>
     </div>
