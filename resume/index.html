@@ -293,6 +293,17 @@
       text-align: center;
       text-transform: uppercase;
     }
+    .qr-url {
+      font-family: var(--mono);
+      font-size: 7.5px;
+      color: var(--teal);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .qr-url:hover { color: #5fddbb; text-decoration: underline; }
+    body.light-mode .qr-url:hover { color: #0b6b52; }
 
     /* ── SECTION ── */
     .section { margin-bottom: 18px; }
@@ -599,8 +610,11 @@
           </div>
         </div>
         <div class="header-right">
-          <div class="qr-wrapper" id="qrcode"></div>
+          <a href="https://jjp-build.vercel.app" target="_blank" style="display:block;line-height:0;">
+            <div class="qr-wrapper" id="qrcode"></div>
+          </a>
           <div class="qr-label">Portfolio</div>
+          <a href="https://jjp-build.vercel.app" target="_blank" class="qr-url">jjp-build.vercel.app</a>
         </div>
       </div>
 
