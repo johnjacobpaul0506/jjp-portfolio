@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>John Jacob Paul — Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Dark Theme Defaults */
+      --navy:      #0d1117;
+      --navy2:     #111827;
+      --navy3:     #1a2332;
+      --card:      #151f2e;
+      --card2:     #1e2d42;
+      --border:    #1e3a5f;
+      --border2:   #243650;
+      --teal:      #4ecca3;
+      --teal-dim:  #2aaa80;
+      --teal-faint:#1a5c47;
+      --text:      #e8edf5;
+      --text-dim:  #7a90a8;
+      --text-faint:#3a5068;
+      --sans:  'Space Grotesk', sans-serif;
+      --body:  'Inter', sans-serif;
+      --mono:  'Libre Franklin', sans-serif;
+    }
+
+    /* ── LIGHT MODE (PDF View) ── */
+    body.light-mode {
+      --navy:      #ffffff;
+      --navy2:     #f8fafc;
+      --navy3:     #f1f5f9;
+      --card:      #ffffff;
+      --card2:     #e2e8f0;
+      --border:    #c8d4e0;
+      --border2:   #d4dde8;
+      --teal:      #0e8a6a;
+      --teal-dim:  #0e7a5d;
+      --teal-faint:#0a5c45;
+      --text:      #0d1117;
+      --text-dim:  #374558;
+      --text-faint:#6b7a8d;
+    }
+
+    body.light-mode .resume-name {
+      background: none;
+      -webkit-text-fill-color: var(--text);
+      color: var(--text);
+    }
+    body.light-mode .skill-tag { background: rgba(14,138,106,0.07); border-color: rgba(14,138,106,0.2); }
+    body.light-mode .summary-text { border-color: rgba(14,138,106,0.25); border-left-color: var(--teal); }
+    body.light-mode .project-pill { border-color: rgba(14,138,106,0.25); border-left-color: var(--teal); }
+    body.light-mode .exp-note { background: rgba(14,138,106,0.04); border-color: rgba(14,138,106,0.15); }
+    body.light-mode .section-heading::after { background: var(--border); }
+
+    body {
+      background: var(--navy3);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 32px 20px 80px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── DOWNLOAD & NAV BAR ── */
+    .download-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(13,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #1e3a5f;
+    }
+    body.light-mode .download-bar {
+      background: rgba(241,245,249,0.92);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .download-bar-left { flex: 1; }
+    
+    .download-bar-center {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+      text-align: center;
+      flex: 1;
+      white-space: nowrap;
+    }
+
+    .download-bar-right {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .btn-theme {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-theme:hover {
+      background: var(--border);
+    }
+    .btn-theme svg { width: 16px; height: 16px; }
+
+    .btn-download {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      background: var(--teal);
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    body:not(.light-mode) .btn-download { color: #0d1117; }
+    
+    .btn-download:hover {
+      background: #5fddbb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(78,204,163,0.35);
+    }
+    .btn-download svg { width: 14px; height: 14px; }
+
+    /* ── RESUME WRAPPER ── */
+    #resume {
+      max-width: 794px;
+      margin: 60px auto 0;
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    /* ── PAGE ── */
+    .page {
+      width: 100%;
+      padding: 40px 48px; /* Tightened slightly to ensure Page 1 fits completely */
+      min-height: 1122px; 
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .page + .page {
+      border-top: 2px dashed var(--border2);
+    }
+    .page-label {
+      position: absolute;
+      top: 12px; right: 16px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-faint);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── PDF EXPORT SPECIFIC STYLES ── */
+    #resume.pdf-exporting {
+      margin: 0 !important;
+      border: none !important;
+      border-radius: 0 !important;
+      width: 794px !important;
+      max-width: none !important;
+    }
+    #resume.pdf-exporting .page {
+      height: 1122px !important;
+      min-height: 1122px !important;
+      max-height: 1122px !important;
+      overflow: hidden !important; 
+    }
+    #resume.pdf-exporting .page + .page {
+      border-top: none !important;
+    }
+    body.pdf-exporting-body {
+      background: #ffffff !important;
+    }
+
+    /* ── HEADER ── */
+    .resume-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 22px; /* Tightened */
+      padding-bottom: 20px; /* Tightened */
+      border-bottom: 1px solid var(--border);
+    }
+    .resume-name {
+      font-family: var(--sans);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(90deg, #4ecca3 0%, #a8f0da 55%, #e8edf5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+    .resume-title {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--teal-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .contact-item svg {
+      width: 11px; height: 11px;
+      color: var(--teal);
+      flex-shrink: 0;
+    }
+    .contact-item a {
+      color: var(--text-dim);
+      text-decoration: none;
+    }
+    .contact-item a:hover { color: var(--teal); }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .qr-wrapper {
+      width: 80px; height: 80px;
+      border: 1px solid rgba(78,204,163,0.3);
+      border-radius: 4px;
+      padding: 4px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr-wrapper img { width: 100%; height: 100%; }
+    .qr-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 18px; } /* Tightened */
+    .section-heading {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--teal);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── SUMMARY ── */
+    .summary-text {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      padding: 14px 18px;
+      border: 1px solid rgba(78,204,163,0.18);
+      border-left: 3px solid var(--teal);
+      border-radius: 4px;
+    }
+
+    /* ── EXPERIENCE ENTRY ── */
+    .exp-entry { margin-bottom: 18px; }
+    .exp-entry:last-child { margin-bottom: 0; }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3px;
+    }
+    .exp-title {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .exp-dates {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--teal);
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+    .exp-org {
+      font-size: 11.5px;
+      color: var(--teal-dim);
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .exp-note {
+      font-size: 11px;
+      color: var(--text-faint);
+      margin-bottom: 7px;
+      padding: 5px 10px;
+      background: rgba(78,204,163,0.04);
+      border: 1px solid rgba(78,204,163,0.1);
+      border-radius: 3px;
+      font-style: italic;
+    }
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .bullet-list li {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.55;
+      padding-left: 14px;
+      position: relative;
+    }
+    .bullet-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .project-pill {
+      border: 1px solid rgba(78,204,163,0.2);
+      border-left: 3px solid var(--teal);
+      border-radius: 4px;
+      padding: 10px 12px;
+    }
+    .project-pill-name {
+      font-family: var(--sans);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .project-pill-meta {
+      font-size: 10px;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+
+    /* ── SKILLS GRID ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .skill-group-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--teal-dim);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .skill-tag {
+      font-size: 10px;
+      color: var(--text-dim);
+      background: rgba(78,204,163,0.06);
+      border: 1px solid rgba(78,204,163,0.15);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── EDUCATION ── */
+    .edu-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .edu-entry:last-child { margin-bottom: 0; }
+    .edu-degree {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .edu-inst {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .edu-dates {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--teal);
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 18px 0;
+    }
+
+    /* ── PAGE FOOTER ── */
+    .page-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .page-footer-name {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-faint);
+    }
+    .page-footer-url {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--teal-faint);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── PRINT / PDF ── */
+    @media print {
+      body { background: var(--navy); padding: 0; }
+      .download-bar { display: none; }
+      #resume { margin: 0; border: none; border-radius: 0; max-width: 100%; }
+      .page { padding: 36px 44px; min-height: auto; height: auto; }
+      .page + .page { border-top: none; page-break-before: always; }
+      .page-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DOWNLOAD BAR -->
+  <div class="download-bar">
+    <div class="download-bar-left"></div>
+    <div class="download-bar-center">Resume · John Jacob Paul</div>
+    <div class="download-bar-right">
+      <button class="btn-theme" onclick="toggleTheme()" title="Toggle Theme (Light / Dark Mode)">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Sun Icon default because site defaults to dark -->
+          <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+      <button class="btn-download" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- RESUME -->
+  <div id="resume">
+
+    <!-- PAGE 1 -->
+    <div class="page">
+      <span class="page-label">Page 1 of 2</span>
+
+      <!-- HEADER -->
+      <div class="resume-header">
+        <div class="header-left">
+          <div class="resume-name">John Jacob Paul</div>
+          <div class="resume-title">Senior Digital Coordinator · BIM & Digital Construction</div>
+          <div class="contact-row">
+            <div class="contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.79 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-.59a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 15.92z"/></svg>
+              0466 536 199
+            </div>
+            <div class="contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:johnjacobpaul0506@gmail.com">johnjacobpaul0506@gmail.com</a>
+            </div>
+            <div class="contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <a href="https://www.linkedin.com/in/john-jacob-paul-480b07126/" target="_blank">linkedin.com/in/john-jacob-paul</a>
+            </div>
+            <div class="contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 00-8 8c0 5.25 8 13 8 13s8-7.75 8-13a8 8 0 00-8-8z"/></svg>
+              Adelaide, SA
+            </div>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="qr-wrapper" id="qrcode"></div>
+          <div class="qr-label">Portfolio</div>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="section">
+        <div class="section-heading">Professional Summary</div>
+        <div class="summary-text">
+          Senior Digital Coordinator with 5+ years in the construction industry, specialising in BIM coordination, digital delivery, reality capture, and construction automation. Proven ability to bridge the gap between design intent and site reality through emerging technology, data-driven workflows, and cross-discipline coordination. Known for expanding the BIM role beyond traditional modelling — integrating design management, structural detailing, analytics, and field technology into a cohesive digital delivery framework. Currently driving digital innovation at Sarah Constructions while contributing to the next generation of practitioners as a Guest Lecturer at Adelaide University.
+        </div>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="section">
+        <div class="section-heading">Experience</div>
+
+        <!-- Sarah Constructions -->
+        <div class="exp-entry">
+          <div class="exp-header">
+            <div class="exp-title">Senior Digital Coordinator</div>
+            <div class="exp-dates">2021 — Present</div>
+          </div>
+          <div class="exp-org">Sarah Constructions · Digital Division · Adelaide, SA</div>
+          <div class="exp-note">Joined as Site Assistant in final year of university. Transitioned to Graduate upon degree completion — awarded the Sarah Graduate Scholarship Grant. Progressively promoted to Coordinator and then Senior Digital Coordinator within the Digital Division.</div>
+          <ul class="bullet-list">
+            <li>Author and maintain BIM Execution Plans and Common Data Environments in accordance with ISO 19650, structuring digital delivery workflows across design and construction phases.</li>
+            <li>Lead cross-discipline building services coordination (mechanical, electrical, hydraulic, fire) using Revizto — automated clash scheduling, issue assignment via responsibility matrix, and virtual inspection workflows.</li>
+            <li>Manage structural shop detailing concurrent to design development, delivering LOD400 models ready for fabrication by end of design phase — reducing programme duration through early cross-discipline alignment.</li>
+            <li>Developed and deployed a custom PyRevit add-in for the organisation, automating model auditing, data extraction, and shared parameter management.</li>
+            <li>Built Power BI dashboards connected to weekly Revizto/Revit exports, tracking model growth, clash status, issue resolution trends, and quantity changes over time.</li>
+            <li>Conduct CASA-compliant drone operations; process imagery in Agisoft Metashape to produce georeferenced point clouds and orthomosaics for as-built validation.</li>
+            <li>Manage 360° reality capture workflows via Cupix and DroneDeploy for spatial validation against the coordinated 3D model throughout construction.</li>
+            <li>Lead quantity takeoff workflows — extracting model data from Revit and Revizto for cost estimation and live bill-of-materials tracking via Power BI.</li>
+          </ul>
+          <!-- Key Projects embedded -->
+          <div style="margin-top: 12px;">
+            <div style="font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--teal-dim); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 7px;">Key Projects</div>
+            <div class="projects-grid">
+              <div class="project-pill">
+                <div class="project-pill-name">New Northern Suburbs High School</div>
+                <div class="project-pill-meta">Current · BIM Coordination, Steel Detailing, Reality Capture, Analytics</div>
+              </div>
+              <div class="project-pill">
+                <div class="project-pill-name">Australian Naval Infrastructure</div>
+                <div class="project-pill-meta">BIM Coordination, Point Cloud, 4D Simulation, Offsite Construction</div>
+              </div>
+              <div class="project-pill">
+                <div class="project-pill-name">Morialta Secondary School</div>
+                <div class="project-pill-meta">Lead Services Coordination, Clash Automation, Virtual Inspection</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- CORE COMPETENCIES -->
+        <div style="margin-top: 6px;">
+          <div style="font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--teal-dim); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 7px;">Core Competencies</div>
+          <div class="skill-tags" style="gap: 6px;">
+            <span class="skill-tag">Digital Delivery · ISO 19650</span>
+            <span class="skill-tag">BIM Coordination</span>
+            <span class="skill-tag">Lead Services Coordination</span>
+            <span class="skill-tag">Structural Detailing (LOD400)</span>
+            <span class="skill-tag">Model Analytics & Power BI</span>
+            <span class="skill-tag">Quantity Takeoffs</span>
+            <span class="skill-tag">Drone Operations</span>
+            <span class="skill-tag">360° Reality Capture</span>
+            <span class="skill-tag">PyRevit Automation</span>
+            <span class="skill-tag">Design Management</span>
+            <span class="skill-tag">Construction Technology R&D</span>
+            <span class="skill-tag">Project Planning & Scheduling</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-footer">
+        <span class="page-footer-name">John Jacob Paul</span>
+        <span class="page-footer-url">jjp-build.vercel.app</span>
+      </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page page-break">
+      <span class="page-label">Page 2 of 2</span>
+
+      <!-- EXPERIENCE CONTINUED -->
+      <div class="section">
+        <div class="section-heading">Experience (Continued)</div>
+
+        <!-- Guest Lecturer -->
+        <div class="exp-entry">
+          <div class="exp-header">
+            <div class="exp-title">Guest Lecturer & Teaching Demonstrator</div>
+            <div class="exp-dates">2021 — Present</div>
+          </div>
+          <div class="exp-org">Adelaide University (formerly University of Adelaide) · Adelaide, SA</div>
+          <ul class="bullet-list">
+            <li>Invited to deliver guest lectures on Digital Construction topics, bridging industry practice and academic curriculum.</li>
+            <li>Appointed Teaching Demonstrator for Building Services &amp; Environment post-Masters, recognised for industry contributions at Sarah Constructions.</li>
+          </ul>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Astel Homes -->
+        <div class="exp-entry">
+          <div class="exp-header">
+            <div class="exp-title">Project Officer</div>
+            <div class="exp-dates">Dec 2020 — Apr 2021</div>
+          </div>
+          <div class="exp-org">Astel Homes · Part-time · Adelaide, SA</div>
+          <ul class="bullet-list">
+            <li>Streamlined pre-construction operations by coordinating with clients, architects, and engineers to facilitate planning consent and development approvals.</li>
+            <li>Liaised with material suppliers and subcontractors to obtain competitive quotes and build long-term trade relationships.</li>
+            <li>Created and maintained a project database tracking stakeholder details, timelines, and cost data within the Buildertrend project management platform.</li>
+            <li>Prepared cost estimates for renovation projects and produced status reports for the construction manager.</li>
+          </ul>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Sobha Limited -->
+        <div class="exp-entry">
+          <div class="exp-header">
+            <div class="exp-title">Planning Engineer</div>
+            <div class="exp-dates">Dec 2017 — Apr 2019</div>
+          </div>
+          <div class="exp-org">Sobha Limited · India</div>
+          <ul class="bullet-list">
+            <li>Developed and maintained master project schedules for high-rise residential and mixed-use developments, tracking milestones and critical path activities.</li>
+            <li>Monitored construction progress against baseline programmes, identified schedule variances, and coordinated recovery plans with site and procurement teams.</li>
+            <li>Prepared weekly and monthly progress reports for senior management and client stakeholders, including earned value analysis and lookahead schedules.</li>
+            <li>Coordinated across design, procurement, and construction teams to align project planning with resource availability and material delivery timelines.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="section">
+        <div class="section-heading">Education</div>
+        <div class="edu-entry">
+          <div>
+            <div class="edu-degree">Master of Construction Management</div>
+            <div class="edu-inst">University of Adelaide · Adelaide, SA</div>
+          </div>
+          <div class="edu-dates">2019 — 2021</div>
+        </div>
+        <div class="edu-entry">
+          <div>
+            <div class="edu-degree">Bachelor of Technology — Civil Engineering</div>
+            <div class="edu-inst">National Institute of Technology (NIT) · India</div>
+          </div>
+          <div class="edu-dates">2013 — 2017</div>
+        </div>
+      </div>
+
+      <!-- REFEREES -->
+      <div class="section">
+        <div class="section-heading">Referees</div>
+        <p style="font-size: 11.5px; color: var(--text-faint); font-style: italic;">Available upon request.</p>
+      </div>
+
+      <div class="page-footer">
+        <span class="page-footer-name">John Jacob Paul</span>
+        <span class="page-footer-url">jjp-build.vercel.app</span>
+      </div>
+    </div>
+
+  </div><!-- /resume -->
+
+  <script>
+    // ── THEME TOGGLE ──
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const icon = document.getElementById('theme-icon');
+      
+      if (document.body.classList.contains('light-mode')) {
+        // Moon icon for switching back to Dark Mode
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>';
+      } else {
+        // Sun icon for switching to Light Mode
+        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      }
+    }
+
+    // ── QR CODE ──
+    new QRCode(document.getElementById("qrcode"), {
+      text: "https://jjp-build.vercel.app",
+      width: 72,
+      height: 72,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // ── DOWNLOAD PDF ──
+    function downloadPDF() {
+      const btn = document.querySelector('.btn-download');
+      btn.innerHTML = 'Generating...';
+      btn.disabled = true;
+
+      const element = document.getElementById('resume');
+      const pageLabels = document.querySelectorAll('.page-label');
+
+      // Preserve current theme so we can revert post-generation
+      const wasLightMode = document.body.classList.contains('light-mode');
+
+      // Force into Light mode and strict PDF export layouts
+      document.body.classList.add('light-mode');
+      document.body.classList.add('pdf-exporting-body');
+      element.classList.add('pdf-exporting');
+      pageLabels.forEach(el => el.style.display = 'none');
+
+      // Force exact pixel sizes matching the DOM for seamless cuts
+      const opt = {
+        margin:       0,
+        filename:     'John_Jacob_Paul_Resume.pdf',
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
+        // Use pixel units directly tied to the canvas size so jsPDF mathematically cuts exactly between pages
+        jsPDF:        { unit: 'px', format: [794, 1122], orientation: 'portrait' } 
+      };
+
+      html2pdf().set(opt).from(element).save().then(() => {
+        // Restore layout classes
+        element.classList.remove('pdf-exporting');
+        document.body.classList.remove('pdf-exporting-body');
+        pageLabels.forEach(el => el.style.display = '');
+        
+        // Restore previous theme
+        if (!wasLightMode) {
+          document.body.classList.remove('light-mode');
+        }
+        
+        // Reset Button
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF`;
+        btn.disabled = false;
+      });
+    }
+  </script>
+</body>
+</html>
