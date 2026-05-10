@@ -817,11 +817,19 @@
       resume.classList.add('pdf-exporting');
       labels.forEach(el => el.style.display = 'none');
 
-      // 2. Stamp explicit stroke on SVG icons so html2canvas can paint them.
+      // 2. Strip any mobile scale transform so html2canvas captures the full
+      //    794px layout, not the viewport-scaled version.
+      const scaler        = document.getElementById('resume-scaler');
+      const savedTransform     = resume.style.transform;
+      const savedScalerHeight  = scaler.style.height;
+      resume.style.transform   = '';
+      scaler.style.height      = '';
+
+      // 3. Stamp explicit stroke on SVG icons so html2canvas can paint them.
       //    (html2canvas cannot resolve currentColor from a CSS color property.)
       svgs.forEach(svg => svg.setAttribute('stroke', '#0e8a6a'));
 
-      // 3. Give the browser one frame to apply the new styles before capturing
+      // 4. Give the browser one frame to apply the new styles before capturing
       await new Promise(r => setTimeout(r, 120));
 
       try {
@@ -874,18 +882,21 @@
           });
         }
 
-        pdf.save('John_Jacob Paul_Resume.pdf');
+        pdf.save('John_Jacob_Paul_Resume.pdf');
 
       } catch (err) {
         console.error('PDF generation failed:', err);
         alert('PDF generation failed — please try again.');
       } finally {
-        // 4. Restore everything regardless of success/failure
+        // 5. Restore everything regardless of success/failure
         svgs.forEach(svg => svg.setAttribute('stroke', 'currentColor'));
         resume.classList.remove('pdf-exporting');
         document.body.classList.remove('pdf-exporting-body');
         labels.forEach(el => el.style.display = '');
         if (!wasLight) document.body.classList.remove('light-mode');
+        // Re-apply mobile scale if it was active before export
+        resume.style.transform  = savedTransform;
+        scaler.style.height     = savedScalerHeight;
 
         btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF`;
         btn.disabled = false;
