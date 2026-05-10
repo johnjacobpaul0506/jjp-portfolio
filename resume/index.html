@@ -151,14 +151,23 @@
     }
     .btn-download svg { width: 14px; height: 14px; }
 
+    /* ── RESUME SCALER (mobile zoom container) ── */
+    #resume-scaler {
+      margin: 60px auto 0;
+      width: 794px;       /* natural A4 width */
+      max-width: 100%;    /* shrinks the box on narrow viewports … */
+      overflow: visible;  /* … JS scales the child, so no clipping needed */
+    }
+
     /* ── RESUME WRAPPER ── */
     #resume {
-      max-width: 794px;
-      margin: 60px auto 0;
+      width: 794px;       /* always full A4 — JS scales it down on mobile */
+      margin: 0;
       background: var(--navy);
       border: 1px solid var(--border);
       border-radius: 4px;
       overflow: hidden;
+      transform-origin: top left;
       transition: background 0.3s, border-color 0.3s;
     }
 
@@ -514,6 +523,17 @@
     }
 
     /* ── PRINT / PDF ── */
+    /* ── MOBILE ── */
+    @media (max-width: 860px) {
+      body { padding-left: 0; padding-right: 0; }
+
+      /* Collapse the empty left spacer so the label + buttons share the bar */
+      .download-bar-left { display: none; }
+      .download-bar-center { text-align: left; font-size: 10px; }
+      .download-bar { padding: 10px 14px; gap: 8px; }
+      .btn-download { padding: 8px 14px; font-size: 10px; }
+    }
+
     @media print {
       body { background: var(--navy); padding: 0; }
       .download-bar { display: none; }
@@ -547,6 +567,7 @@
   </div>
 
   <!-- RESUME -->
+  <div id="resume-scaler">
   <div id="resume">
 
     <!-- PAGE 1 -->
@@ -749,6 +770,7 @@
     </div>
 
   </div><!-- /resume -->
+  </div><!-- /resume-scaler -->
 
   <script>
     // ── THEME TOGGLE ──
@@ -869,6 +891,31 @@
         btn.disabled = false;
       }
     }
+
+    // ── MOBILE SCALE ──
+    // Scales #resume (fixed 794px wide) to fit the viewport on mobile.
+    // CSS transform doesn't affect layout flow, so we manually set the
+    // scaler's height to match the scaled resume height.
+    function updateResumeScale() {
+      const scaler = document.getElementById('resume-scaler');
+      const resume = document.getElementById('resume');
+      const available = scaler.clientWidth;   // viewport width (minus any padding)
+      const natural   = 794;
+      const scale     = Math.min(1, available / natural);
+
+      if (scale < 1) {
+        resume.style.transform = `scale(${scale})`;
+        // Compensate layout height — transform doesn't shrink the flow box
+        scaler.style.height = (resume.scrollHeight * scale) + 'px';
+      } else {
+        resume.style.transform = '';
+        scaler.style.height    = '';
+      }
+    }
+
+    window.addEventListener('resize', updateResumeScale);
+    // Run after fonts + QR code have rendered so scrollHeight is accurate
+    window.addEventListener('load', updateResumeScale);
   </script>
 </body>
 </html>
