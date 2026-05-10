@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>John Jacob Paul — Resume</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -164,7 +165,7 @@
     /* ── PAGE ── */
     .page {
       width: 100%;
-      padding: 40px 48px; /* Tightened slightly to ensure Page 1 fits completely */
+      padding: 40px 48px;
       min-height: 1122px; 
       position: relative;
       display: flex;
@@ -192,13 +193,15 @@
       max-width: none !important;
     }
     #resume.pdf-exporting .page {
-      height: 1122px !important;
+      /* Let the page render at its natural height so the footer is never clipped.
+         The JS capture step scales each canvas to fit the PDF page exactly. */
       min-height: 1122px !important;
-      max-height: 1122px !important;
-      overflow: hidden !important; 
     }
     #resume.pdf-exporting .page + .page {
       border-top: none !important;
+    }
+    #resume.pdf-exporting .page-break {
+      page-break-before: always !important; /* Explicit CSS page break for the engine */
     }
     body.pdf-exporting-body {
       background: #ffffff !important;
@@ -209,8 +212,8 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 22px; /* Tightened */
-      padding-bottom: 20px; /* Tightened */
+      margin-bottom: 22px;
+      padding-bottom: 20px;
       border-bottom: 1px solid var(--border);
     }
     .resume-name {
@@ -283,7 +286,7 @@
     }
 
     /* ── SECTION ── */
-    .section { margin-bottom: 18px; } /* Tightened */
+    .section { margin-bottom: 18px; }
     .section-heading {
       font-family: var(--mono);
       font-size: 9px;
@@ -498,6 +501,16 @@
       font-size: 9px;
       color: var(--teal-faint);
       letter-spacing: 0.06em;
+    }
+
+    /* ── PDF EXPORT SVG FIX ── */
+    /* html2canvas cannot resolve currentColor from CSS; stamp explicit colours */
+    #resume.pdf-exporting .contact-item svg {
+      stroke: #0e8a6a !important;
+      color: #0e8a6a !important;
+    }
+    #resume.pdf-exporting .bullet-list li::before {
+      color: #0e8a6a !important;
     }
 
     /* ── PRINT / PDF ── */
@@ -763,48 +776,98 @@
     });
 
     // ── DOWNLOAD PDF ──
-    function downloadPDF() {
+    // Renders each .page div as an individual html2canvas capture, then
+    // stitches the captures into a multi-page jsPDF document.
+    // This is far more reliable than html2pdf.js's single-canvas + CSS-break approach.
+    async function downloadPDF() {
       const btn = document.querySelector('.btn-download');
       btn.innerHTML = 'Generating...';
       btn.disabled = true;
 
-      const element = document.getElementById('resume');
-      const pageLabels = document.querySelectorAll('.page-label');
+      const resume   = document.getElementById('resume');
+      const pages    = Array.from(document.querySelectorAll('#resume .page'));
+      const labels   = document.querySelectorAll('.page-label');
+      const svgs     = document.querySelectorAll('#resume .contact-item svg');
+      const wasLight = document.body.classList.contains('light-mode');
 
-      // Preserve current theme so we can revert post-generation
-      const wasLightMode = document.body.classList.contains('light-mode');
+      // 1. Apply export state
+      document.body.classList.add('light-mode', 'pdf-exporting-body');
+      resume.classList.add('pdf-exporting');
+      labels.forEach(el => el.style.display = 'none');
 
-      // Force into Light mode and strict PDF export layouts
-      document.body.classList.add('light-mode');
-      document.body.classList.add('pdf-exporting-body');
-      element.classList.add('pdf-exporting');
-      pageLabels.forEach(el => el.style.display = 'none');
+      // 2. Stamp explicit stroke on SVG icons so html2canvas can paint them.
+      //    (html2canvas cannot resolve currentColor from a CSS color property.)
+      svgs.forEach(svg => svg.setAttribute('stroke', '#0e8a6a'));
 
-      // Force exact pixel sizes matching the DOM for seamless cuts
-      const opt = {
-        margin:       0,
-        filename:     'John_Jacob_Paul_Resume.pdf',
-        image:        { type: 'jpeg', quality: 1.0 },
-        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
-        // Use pixel units directly tied to the canvas size so jsPDF mathematically cuts exactly between pages
-        jsPDF:        { unit: 'px', format: [794, 1122], orientation: 'portrait' } 
-      };
+      // 3. Give the browser one frame to apply the new styles before capturing
+      await new Promise(r => setTimeout(r, 120));
 
-      html2pdf().set(opt).from(element).save().then(() => {
-        // Restore layout classes
-        element.classList.remove('pdf-exporting');
-        document.body.classList.remove('pdf-exporting-body');
-        pageLabels.forEach(el => el.style.display = '');
-        
-        // Restore previous theme
-        if (!wasLightMode) {
-          document.body.classList.remove('light-mode');
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ unit: 'px', format: [794, 1122], orientation: 'portrait', compress: true });
+
+        for (let i = 0; i < pages.length; i++) {
+          if (i > 0) pdf.addPage([794, 1122], 'portrait');
+
+          const canvas = await html2canvas(pages[i], {
+            scale: 2,                 // 2× for crisp text
+            useCORS: true,
+            allowTaint: false,
+            backgroundColor: '#ffffff',
+            logging: false,
+            windowWidth: 794
+          });
+
+          // Scale the captured image to fill the PDF page width (794px).
+          // If the page content is slightly taller than 1122px (e.g. footer pushed
+          // past the boundary), scale-to-fit ensures nothing is ever clipped.
+          const pdfW     = 794;
+          const pdfH     = 1122;
+          const naturalW = canvas.width  / 2; // divide by devicePixel scale (2×)
+          const naturalH = canvas.height / 2;
+          const fitScale = Math.min(pdfW / naturalW, pdfH / naturalH);
+          const imgW     = naturalW * fitScale;
+          const imgH     = naturalH * fitScale;
+          const offsetX  = (pdfW - imgW) / 2;
+          const offsetY  = (pdfH - imgH) / 2;
+
+          const imgData = canvas.toDataURL('image/jpeg', 1.0);
+          pdf.addImage(imgData, 'JPEG', offsetX, offsetY, imgW, imgH);
+
+          // Re-stamp hyperlinks as PDF annotations.
+          // html2canvas flattens everything to pixels, so we overlay link rectangles
+          // by mapping each <a> element's DOM position into PDF coordinate space.
+          const pageRect = pages[i].getBoundingClientRect();
+          pages[i].querySelectorAll('a[href]').forEach(anchor => {
+            const r    = anchor.getBoundingClientRect();
+            // Coordinates relative to the top-left of this page div
+            const relX = r.left - pageRect.left;
+            const relY = r.top  - pageRect.top;
+            // Apply the same fitScale used for the image, plus any centering offset
+            const pdfX = offsetX + relX * fitScale;
+            const pdfY = offsetY + relY * fitScale;
+            const pdfW = r.width  * fitScale;
+            const pdfH = r.height * fitScale;
+            pdf.link(pdfX, pdfY, pdfW, pdfH, { url: anchor.getAttribute('href') });
+          });
         }
-        
-        // Reset Button
+
+        pdf.save('John_Jacob Paul_Resume.pdf');
+
+      } catch (err) {
+        console.error('PDF generation failed:', err);
+        alert('PDF generation failed — please try again.');
+      } finally {
+        // 4. Restore everything regardless of success/failure
+        svgs.forEach(svg => svg.setAttribute('stroke', 'currentColor'));
+        resume.classList.remove('pdf-exporting');
+        document.body.classList.remove('pdf-exporting-body');
+        labels.forEach(el => el.style.display = '');
+        if (!wasLight) document.body.classList.remove('light-mode');
+
         btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF`;
         btn.disabled = false;
-      });
+      }
     }
   </script>
 </body>
