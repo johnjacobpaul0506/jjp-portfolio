@@ -47,11 +47,11 @@
       transition: opacity .6s ease, visibility .6s ease;
     }
     .media-loader.loader-done { opacity: 0; visibility: hidden; pointer-events: none; }
-    .loader-inner { width: min(320px, 80vw); text-align: center; }
-    .loader-building { width: 100%; max-width: 220px; height: auto; margin: 0 auto 22px auto; display: block; overflow: visible; }
+    .loader-inner { width: min(380px, 88vw); text-align: center; }
+    .loader-building { width: 100%; max-width: 280px; height: auto; margin: 0 auto 18px auto; display: block; overflow: visible; }
     .build-line {
       stroke: var(--teal);
-      stroke-width: 1.6;
+      stroke-width: 1.5;
       stroke-linecap: round;
       opacity: 0;
       transform: translate(var(--dx,0), var(--dy,0)) rotate(var(--dr,0deg));
@@ -65,10 +65,25 @@
       animation: buildGlow 3.2s ease-in-out 1.3s infinite;
     }
     @keyframes buildGlow { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
-    .loader-eyebrow {
-      font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
-      text-transform: uppercase; color: var(--teal); margin-bottom: 22px;
+    .build-window {
+      fill: transparent;
+      stroke: rgba(78,204,163,0.3);
+      stroke-width: 1;
+      opacity: 0;
+      transition: opacity .6s ease, fill .4s ease, stroke .4s ease;
     }
+    .build-window.visible { opacity: 1; }
+    .build-window.lit {
+      fill: var(--teal);
+      stroke: var(--teal);
+      filter: drop-shadow(0 0 2px rgba(78,204,163,0.9));
+    }
+    .loader-welcome {
+      font-family: var(--sans); font-size: 17px; font-weight: 600;
+      color: var(--text); opacity: 0; margin-bottom: 20px;
+      transition: opacity .9s ease, text-shadow .9s ease;
+    }
+    .loader-welcome.lit { opacity: 1; text-shadow: 0 0 16px rgba(78,204,163,0.45); }
     .loader-bar-track {
       width: 100%; height: 3px; background: var(--border2);
       border-radius: 3px; overflow: hidden;
@@ -689,7 +704,7 @@
     .timeline-item {
       width: 50%;
       position: relative;
-      margin-bottom: 40px;
+      margin-bottom: 22px;
     }
     .timeline-item:last-child { margin-bottom: 0; }
 
@@ -877,7 +892,7 @@
       /* Timeline Mobile Reductions */
       .timeline-headers { display: none; }
       .timeline::before { left: 20px; transform: none; }
-      .timeline-item { width: 100%; text-align: left !important; padding: 0 0 32px 45px !important; margin-left: 0 !important; }
+      .timeline-item { width: 100%; text-align: left !important; padding: 0 0 18px 45px !important; margin-left: 0 !important; }
       .timeline-dot { left: 13px !important; right: auto !important; width: 12px; height: 12px; top: 4px; }
       .timeline-content { padding: 16px 20px; }
       .timeline-title { font-size: 14px; }
@@ -905,10 +920,11 @@
   <!-- MEDIA PRELOADER -->
   <div id="mediaLoader" class="media-loader" role="status" aria-live="polite">
     <div class="loader-inner">
-      <svg class="loader-building" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg class="loader-building" viewBox="0 0 300 215" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g id="loaderBuildingLines"></g>
+        <g id="loaderBuildingWindows"></g>
       </svg>
-      <p class="loader-eyebrow">Assembling the experience</p>
+      <p class="loader-welcome" id="loaderWelcome">Welcome to my Digital Portfolio</p>
       <div class="loader-bar-track">
         <div class="loader-bar-fill" id="loaderBarFill"></div>
       </div>
@@ -916,55 +932,115 @@
     </div>
   </div>
   <script>
-  // Fast path only: if we already fully cached media earlier this
-  // session, skip straight to ready instead of flashing the loader.
-  // The real tracking (below, bottom of page) waits on the actual
-  // <video> elements so "loaded" means "will truly play instantly".
-  (function () {
-    try {
-      if (sessionStorage.getItem('jjp-media-cached') === '1') {
-        document.body.classList.add('media-ready');
-        var ml = document.getElementById('mediaLoader');
-        if (ml) ml.classList.add('loader-done');
-      }
-    } catch (e) {}
-  })();
+  // Timestamp used by the bottom script to guarantee the assembly +
+  // welcome sequence gets to play out fully, on every visit.
+  window.__jjpLoaderStart = Date.now();
 
-  // Loader visual: a scattered field of lines flies in and assembles
-  // into a small skyline, echoing the hero's city silhouette.
+  // Loader visual: a scattered field of lines flies in and assembles into
+  // a building under construction with a tower crane (columns with
+  // exposed rebar, cross-braced bays, a lattice-mast crane with jib,
+  // counter-jib and hook). Windows then light up in sequence, followed
+  // by the welcome message glowing on.
   (function () {
     var g = document.getElementById('loaderBuildingLines');
+    var wg = document.getElementById('loaderBuildingWindows');
+    var welcomeEl = document.getElementById('loaderWelcome');
     if (!g) return;
     var svgNS = 'http://www.w3.org/2000/svg';
+
     var segs = [
-      [70,180,70,40],[170,180,170,40],[70,40,170,40],[70,180,170,180],
-      [70,68,170,68],[70,96,170,96],[70,124,170,124],[70,152,170,152],
-      [103,40,103,180],[137,40,137,180],
-      [120,40,120,18],
-      [20,180,20,90],[60,180,60,90],[20,90,60,90],[20,180,60,180],
-      [20,120,60,120],[20,150,60,150],
-      [180,180,180,110],[220,180,220,110],[180,110,220,110],[180,180,220,180],
-      [180,135,220,135],[180,158,220,158]
+      // Building columns
+      [50,195,50,55],[90,195,90,55],[130,195,130,55],[170,195,170,55],
+      // Floor slabs
+      [50,195,170,195],[50,160,170,160],[50,125,170,125],[50,90,170,90],[50,55,170,55],
+      // Cross-bracing, left bay
+      [50,195,90,160],[50,160,90,195],
+      [50,160,90,125],[50,125,90,160],
+      [50,125,90,90],[50,90,90,125],
+      [50,90,90,55],[50,55,90,90],
+      // Cross-bracing, right bay
+      [130,195,170,160],[130,160,170,195],
+      [130,160,170,125],[130,125,170,160],
+      [130,125,170,90],[130,90,170,125],
+      [130,90,170,55],[130,55,170,90],
+      // Exposed rebar above the last poured floor
+      [48,55,44,30],[52,55,56,30],
+      [88,55,84,30],[92,55,96,30],
+      [128,55,124,30],[132,55,136,30],
+      [168,55,164,30],[172,55,176,30],
+      // Tower crane mast (lattice)
+      [230,195,230,28],[238,195,238,28],
+      [230,165,238,165],[230,135,238,135],[230,105,238,105],[230,75,238,75],
+      [230,195,238,165],[238,165,230,135],[230,135,238,105],[238,105,230,75],
+      // Slewing cab
+      [222,28,246,28],[222,28,228,15],[246,28,240,15],
+      // Jib (working arm, reaches over the building)
+      [234,8,65,8],[234,18,65,18],
+      [210,8,210,18],[185,8,185,18],[160,8,160,18],[135,8,135,18],[110,8,110,18],[85,8,85,18],
+      // Counter-jib + counterweight
+      [234,8,280,8],[234,18,280,18],
+      [250,8,250,18],[265,8,265,18],
+      [270,18,290,18],[290,18,290,32],[290,32,270,32],[270,32,270,18],
+      // Hook block
+      [150,18,150,70],[150,70,146,74],[150,70,154,74],
+      // Crane base bracing
+      [230,195,238,180],[238,195,230,180]
     ];
-    try {
-      segs.forEach(function (s) {
-        var line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', s[0]); line.setAttribute('y1', s[1]);
-        line.setAttribute('x2', s[2]); line.setAttribute('y2', s[3]);
-        line.setAttribute('class', 'build-line');
-        line.style.setProperty('--dx', (Math.random() * 280 - 140).toFixed(0) + 'px');
-        line.style.setProperty('--dy', (Math.random() * 240 - 120).toFixed(0) + 'px');
-        line.style.setProperty('--dr', (Math.random() * 240 - 120).toFixed(0) + 'deg');
-        line.style.transitionDelay = (Math.random() * 0.45).toFixed(2) + 's';
-        g.appendChild(line);
+
+    segs.forEach(function (s) {
+      var line = document.createElementNS(svgNS, 'line');
+      line.setAttribute('x1', s[0]); line.setAttribute('y1', s[1]);
+      line.setAttribute('x2', s[2]); line.setAttribute('y2', s[3]);
+      line.setAttribute('class', 'build-line');
+      line.style.setProperty('--dx', (Math.random() * 320 - 160).toFixed(0) + 'px');
+      line.style.setProperty('--dy', (Math.random() * 260 - 130).toFixed(0) + 'px');
+      line.style.setProperty('--dr', (Math.random() * 260 - 130).toFixed(0) + 'deg');
+      line.style.transitionDelay = (Math.random() * 0.5).toFixed(2) + 's';
+      g.appendChild(line);
+    });
+
+    // Windows: a 3-bay x 4-floor grid of small marks on the building face
+    if (wg) {
+      var bayX = [58, 74, 98, 114, 138, 154];
+      var floorY = [62, 97, 132, 167];
+      floorY.forEach(function (y) {
+        bayX.forEach(function (x) {
+          var r = document.createElementNS(svgNS, 'rect');
+          r.setAttribute('x', x); r.setAttribute('y', y);
+          r.setAttribute('width', 8); r.setAttribute('height', 10);
+          r.setAttribute('class', 'build-window');
+          wg.appendChild(r);
+        });
       });
+    }
+
+    try {
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
           Array.prototype.forEach.call(g.children, function (line) {
             line.classList.add('assembled');
           });
+          if (wg) {
+            Array.prototype.forEach.call(wg.children, function (w) {
+              w.classList.add('visible');
+            });
+          }
         });
       });
+
+      // Once the structure has largely assembled, windows light up in
+      // sequence, like dusk falling over the building...
+      setTimeout(function () {
+        if (!wg) return;
+        Array.prototype.forEach.call(wg.children, function (w, i) {
+          setTimeout(function () { w.classList.add('lit'); }, i * 45);
+        });
+      }, 1300);
+
+      // ...then the welcome message glows on.
+      setTimeout(function () {
+        if (welcomeEl) welcomeEl.classList.add('lit');
+      }, 2150);
     } catch (e) {}
   })();
   </script>
@@ -1371,16 +1447,20 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
     // somewhere") so the loader finishing really means instant playback.
     (function () {
       var mediaLoader = document.getElementById('mediaLoader');
-      if (!mediaLoader || mediaLoader.classList.contains('loader-done')) return;
+      if (!mediaLoader) return;
       var barFill = document.getElementById('loaderBarFill');
       var percentEl = document.getElementById('loaderPercent');
       var statusText = document.getElementById('loaderStatusText');
+      // The building+crane assembly and welcome sequence takes about this
+      // long to play out — the reveal waits for whichever finishes last:
+      // real media readiness, or this minimum so the intro is never cut short.
+      var MIN_DISPLAY_MS = 2800;
+      var startedAt = window.__jjpLoaderStart || Date.now();
 
-      function finishLoading() {
+      function revealNow() {
         try {
           document.body.classList.add('media-ready');
           mediaLoader.classList.add('loader-done');
-          sessionStorage.setItem('jjp-media-cached', '1');
         } catch (e) {}
         // Belt-and-suspenders: if autoplay didn't engage while a video was
         // hidden behind the loader, nudge it now that the page is visible.
@@ -1390,6 +1470,11 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
             if (p && p.catch) p.catch(function () {});
           }
         });
+      }
+
+      function finishLoading() {
+        var remaining = MIN_DISPLAY_MS - (Date.now() - startedAt);
+        if (remaining > 0) { setTimeout(revealNow, remaining); } else { revealNow(); }
       }
 
       try {
