@@ -47,7 +47,24 @@
       transition: opacity .6s ease, visibility .6s ease;
     }
     .media-loader.loader-done { opacity: 0; visibility: hidden; pointer-events: none; }
-    .loader-inner { width: min(280px, 70vw); text-align: center; }
+    .loader-inner { width: min(320px, 80vw); text-align: center; }
+    .loader-building { width: 100%; max-width: 220px; height: auto; margin: 0 auto 22px auto; display: block; overflow: visible; }
+    .build-line {
+      stroke: var(--teal);
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      opacity: 0;
+      transform: translate(var(--dx,0), var(--dy,0)) rotate(var(--dr,0deg));
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: transform 1s cubic-bezier(.22,.9,.24,1), opacity .5s ease;
+    }
+    .build-line.assembled {
+      opacity: .85;
+      transform: translate(0,0) rotate(0deg);
+      animation: buildGlow 3.2s ease-in-out 1.3s infinite;
+    }
+    @keyframes buildGlow { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
     .loader-eyebrow {
       font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
       text-transform: uppercase; color: var(--teal); margin-bottom: 22px;
@@ -438,37 +455,53 @@
     .capability-group-label ~ .capability-group-label { margin-top: 40px; }
     .capability-group-label::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
 
-    .capability-feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .capability-feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     .capability-feature {
-      display: flex; align-items: flex-start; gap: 18px;
+      display: flex; flex-direction: column; gap: 10px;
       background: transparent;
       border: 1px solid rgba(78,204,163,0.2);
       border-left: 3px solid var(--teal);
       border-radius: 8px;
-      padding: 22px;
+      padding: 14px 16px;
       cursor: pointer;
       transition: transform .3s, box-shadow .3s, border-color .3s;
     }
     .capability-feature:hover {
-      transform: translateY(-4px);
+      transform: translateY(-3px);
       border-color: rgba(78,204,163,0.45);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.3), 0 4px 12px rgba(78,204,163,0.08);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.28), 0 4px 12px rgba(78,204,163,0.08);
     }
+    .capability-feature-top { display: flex; align-items: center; gap: 14px; }
     .capability-feature-play {
-      width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
       background: rgba(78,204,163,0.12);
       border: 1px solid rgba(78,204,163,0.4);
       display: flex; align-items: center; justify-content: center;
       transition: background .25s, transform .25s;
     }
-    .capability-feature-play svg { width: 15px; height: 15px; fill: var(--teal); margin-left: 2px; transition: fill .25s; }
+    .capability-feature-play svg { width: 13px; height: 13px; fill: var(--teal); margin-left: 1px; transition: fill .25s; }
     .capability-feature:hover .capability-feature-play { background: var(--teal); transform: scale(1.08); }
     .capability-feature:hover .capability-feature-play svg { fill: #0d1117; }
-    .capability-feature-body { display: flex; flex-direction: column; gap: 6px; }
+    .capability-feature-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
     .capability-feature-cta {
+      align-self: flex-start;
+      margin-left: 52px;
+      display: inline-flex; align-items: center; gap: 6px;
       font-family: var(--mono); font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .08em; color: var(--teal);
-      margin-top: 2px;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: #0d1117;
+      background: var(--teal);
+      padding: 7px 14px;
+      border-radius: 20px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 0 0 0 rgba(78,204,163,0.5);
+      animation: viewWorkPulse 2.8s ease-in-out infinite;
+    }
+    .capability-feature-cta::before { content: '▶'; font-size: 8px; }
+    .capability-feature:hover .capability-feature-cta {
+      background: #5fddbb;
+      box-shadow: 0 4px 14px rgba(78,204,163,0.35);
+      animation: none;
     }
 
     .capability-chip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
@@ -819,9 +852,8 @@
       /* Digital Capability: single column, and the "toolkit" chips
          shrink further so the section reads as scannable, not a wall of text */
       .capability-feature-grid { grid-template-columns: 1fr; }
-      .capability-feature { padding: 18px; gap: 14px; }
-      .capability-feature-play { width: 40px; height: 40px; }
-      .capability-feature-play svg { width: 13px; height: 13px; }
+      .capability-feature { padding: 12px 14px; }
+      .capability-feature-cta { margin-left: 48px; }
       .capability-chip-grid { grid-template-columns: 1fr; gap: 8px; }
       .capability-chip { padding: 12px 16px; gap: 4px; }
       .capability-group-label { font-size: 9px; margin: 28px 0 12px 0; }
@@ -873,7 +905,10 @@
   <!-- MEDIA PRELOADER -->
   <div id="mediaLoader" class="media-loader" role="status" aria-live="polite">
     <div class="loader-inner">
-      <p class="loader-eyebrow">Preparing the experience</p>
+      <svg class="loader-building" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g id="loaderBuildingLines"></g>
+      </svg>
+      <p class="loader-eyebrow">Assembling the experience</p>
       <div class="loader-bar-track">
         <div class="loader-bar-fill" id="loaderBarFill"></div>
       </div>
@@ -892,6 +927,44 @@
         var ml = document.getElementById('mediaLoader');
         if (ml) ml.classList.add('loader-done');
       }
+    } catch (e) {}
+  })();
+
+  // Loader visual: a scattered field of lines flies in and assembles
+  // into a small skyline, echoing the hero's city silhouette.
+  (function () {
+    var g = document.getElementById('loaderBuildingLines');
+    if (!g) return;
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var segs = [
+      [70,180,70,40],[170,180,170,40],[70,40,170,40],[70,180,170,180],
+      [70,68,170,68],[70,96,170,96],[70,124,170,124],[70,152,170,152],
+      [103,40,103,180],[137,40,137,180],
+      [120,40,120,18],
+      [20,180,20,90],[60,180,60,90],[20,90,60,90],[20,180,60,180],
+      [20,120,60,120],[20,150,60,150],
+      [180,180,180,110],[220,180,220,110],[180,110,220,110],[180,180,220,180],
+      [180,135,220,135],[180,158,220,158]
+    ];
+    try {
+      segs.forEach(function (s) {
+        var line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', s[0]); line.setAttribute('y1', s[1]);
+        line.setAttribute('x2', s[2]); line.setAttribute('y2', s[3]);
+        line.setAttribute('class', 'build-line');
+        line.style.setProperty('--dx', (Math.random() * 280 - 140).toFixed(0) + 'px');
+        line.style.setProperty('--dy', (Math.random() * 240 - 120).toFixed(0) + 'px');
+        line.style.setProperty('--dr', (Math.random() * 240 - 120).toFixed(0) + 'deg');
+        line.style.transitionDelay = (Math.random() * 0.45).toFixed(2) + 's';
+        g.appendChild(line);
+      });
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          Array.prototype.forEach.call(g.children, function (line) {
+            line.classList.add('assembled');
+          });
+        });
+      });
     } catch (e) {}
   })();
   </script>
@@ -1129,36 +1202,44 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
     <div class="capability-group-label reveal"><span>See it in action</span></div>
     <div class="capability-feature-grid reveal">
       <div class="capability-feature" data-work-title="3D Model Analytics" data-work-desc="The metadata behind the 3D model and the issue status from Revizto is exported out on a weekly basis which is automatically loaded into PowerBI. The PowerBI dashboard is setup to audit and analyze items such as Model Publish to Revizto Date, Issue Status, Clash Report, Model Growth Tracking etc. The video below shows the different items that we are tracking using PowerBI. " data-video-src="capability/powerbi.mp4">
-        <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
-        <div class="capability-feature-body">
-          <div class="capability-tag">Analytics</div>
-          <h3 class="capability-title">3D Model Analytics & Insights</h3>
-          <span class="capability-feature-cta">Watch Demo</span>
+        <div class="capability-feature-top">
+          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="capability-feature-body">
+            <div class="capability-tag">Analytics</div>
+            <h3 class="capability-title">3D Model Analytics & Insights</h3>
+          </div>
         </div>
+        <span class="capability-feature-cta">Watch Demo</span>
       </div>
       <div class="capability-feature" data-work-title="Quantity Takeoffs" data-work-desc="Quantities are exported either from Revit or Revizto (using a combination of search sets, presets and favorite properties). These are then exported out as an excel file for further use. When required, the export file is loaded to PowerBI and exporting is undertaken on a weekly basis to monitor the change in model quantities. The video below shows how structural quantities are exported from Revizto and loaded into PowerBI giving the end user the ability to select a project and get the associated Bill of Materials." data-video-src="capability/qto.mp4">
-        <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
-        <div class="capability-feature-body">
-          <div class="capability-tag">Cost Estimation</div>
-          <h3 class="capability-title">Quantity Takeoffs</h3>
-          <span class="capability-feature-cta">Watch Demo</span>
+        <div class="capability-feature-top">
+          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="capability-feature-body">
+            <div class="capability-tag">Cost Estimation</div>
+            <h3 class="capability-title">Quantity Takeoffs</h3>
+          </div>
         </div>
+        <span class="capability-feature-cta">Watch Demo</span>
       </div>
       <div class="capability-feature" data-work-title="Revit Automation" data-work-desc="The video below shows how I am using the audit function within a revit container model to validate Grid Alignment across all the discipline models. The workflow involes exporting the data as an xlsx file from revit which is loaded into a web based dashboard for automated analytics." data-video-src="capability/pyrevit.mp4">
-        <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
-        <div class="capability-feature-body">
-          <div class="capability-tag">Automation</div>
-          <h3 class="capability-title">Automated Model Auditing using PyRevit & Web based dasbhoards</h3>
-          <span class="capability-feature-cta">Watch Demo</span>
+        <div class="capability-feature-top">
+          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="capability-feature-body">
+            <div class="capability-tag">Automation</div>
+            <h3 class="capability-title">Automated Model Auditing using PyRevit & Web based dasbhoards</h3>
+          </div>
         </div>
+        <span class="capability-feature-cta">Watch Demo</span>
       </div>
       <div class="capability-feature" data-work-title="Reality Capture" data-work-desc="My experience with Reality Captures ranges from drone mapping to 360 image captures. Drone flight is undertaken (in accordance with CASA regulations) over the project site and the photos are converted to a georeferenced point cloud and an orthomosaic using Agisoft Metashape. Further, for the interior of the building a 360 camera is used alongside Cupix/DroneDeploy to capture the progress on site. The video below shows I have used drone captures and 360 cameras for as built validation." data-video-src="capability/realitycapture.mp4">
-        <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
-        <div class="capability-feature-body">
-          <div class="capability-tag">Reality Capture</div>
-          <h3 class="capability-title">Reality Capture using Drones & 360 Cameras</h3>
-          <span class="capability-feature-cta">Watch Demo</span>
+        <div class="capability-feature-top">
+          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="capability-feature-body">
+            <div class="capability-tag">Reality Capture</div>
+            <h3 class="capability-title">Reality Capture using Drones & 360 Cameras</h3>
+          </div>
         </div>
+        <span class="capability-feature-cta">Watch Demo</span>
       </div>
     </div>
 
@@ -1301,6 +1382,14 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
           mediaLoader.classList.add('loader-done');
           sessionStorage.setItem('jjp-media-cached', '1');
         } catch (e) {}
+        // Belt-and-suspenders: if autoplay didn't engage while a video was
+        // hidden behind the loader, nudge it now that the page is visible.
+        document.querySelectorAll('.project-media video').forEach(function (v) {
+          if (v.paused) {
+            var p = v.play();
+            if (p && p.catch) p.catch(function () {});
+          }
+        });
       }
 
       try {
@@ -1334,7 +1423,11 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
           }
 
           videos.forEach(function (v) {
-            v.setAttribute('preload', 'auto');
+            // Deliberately NOT calling v.load() or re-setting preload here:
+            // the browser already started fetching this element natively
+            // (autoplay + preload="auto" in the markup), and interrupting
+            // that in-flight load is what was stopping autoplay from
+            // reliably resuming once the page became visible. Just observe.
             if (v.readyState >= 3) { tick(); return; } // already playable
             var settled = false;
             function onReady() {
@@ -1346,7 +1439,6 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
             }
             v.addEventListener('canplaythrough', onReady, { once: true });
             v.addEventListener('error', onReady, { once: true });
-            try { v.load(); } catch (e) {}
           });
 
           posterSrcs.concat(logoImgs.map(function (img) { return img.src; })).forEach(function (src) {
