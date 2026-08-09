@@ -197,6 +197,13 @@
       background-clip: text;
       white-space: nowrap;
     }
+    .hero-frag {
+      display: inline-block;
+      opacity: 0;
+      transform: translate(var(--fx,0), var(--fy,0)) rotate(var(--fr,0deg));
+      transition: transform .8s cubic-bezier(.2,.85,.25,1), opacity .5s ease;
+    }
+    body.media-ready .hero-frag { opacity: 1; transform: translate(0,0) rotate(0deg); }
 
     .hero-sub {
       font-family: var(--mono);
@@ -633,9 +640,30 @@
       font-size: 13px;
       color: var(--text-dim);
       line-height: 1.6;
-      margin-bottom: 20px;
       flex-grow: 1;
+      max-height: 0;
+      opacity: 0;
+      margin-bottom: 0;
+      overflow: hidden;
+      transition: max-height .4s ease, opacity .3s ease, margin-bottom .4s ease;
     }
+    .project-card.expanded .project-desc {
+      max-height: 1000px;
+      opacity: 1;
+      margin-bottom: 20px;
+    }
+    .project-toggle {
+      display: inline-flex; align-items: center; gap: 6px;
+      align-self: flex-start;
+      background: none; border: none; padding: 4px 0;
+      margin-top: -4px; margin-bottom: 4px;
+      color: var(--teal-dim);
+      font-family: var(--mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: .06em;
+      cursor: pointer;
+    }
+    .project-toggle svg { width: 12px; height: 12px; transition: transform .25s ease; }
+    .project-card.expanded .project-toggle svg { transform: rotate(180deg); }
     .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .tag {
       font-size: 10px; color: var(--teal-dim);
@@ -1211,6 +1239,10 @@
               <source src="projects/nnshs.mp4" type="video/mp4">
             </video>
           </div>
+          <button class="project-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">Read more</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
           <p class="project-desc">This is the ongoing superschool project in the northern suburbs of South Australia comprising of 4 learning centres, gym, admin centre, cultural building and a significant area of landscape and play areas. Revizto was setup in the design for coordination and collaboration between the contractor and consultants. The Digital Delivery component of this project required compliance with ISO19650 and Project Specific BIM Brief developed by the Department of Infrastructure & Transport. The design models were developed to LOD 300 making it quite reliable for Quantity Takeoffs to great extent. As the lead managing the Digital Delivery process throughout construction phase, we also setup a Revit container file to host all the discipline Revit models. To automate the process of auditing against the BIM Execution Plan, custom scripting using PyRevit was utilized to ensure consistency in grid/level alignment across the various models. PowerBI dashboards have also been setup for the job to monitor changes to the model throughout construction phase.</p>
           <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural & Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Automated Revit Model Audits</span><span class="tag">Reality Capture</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span></div>
         </div>
@@ -1223,6 +1255,10 @@
               <source src="projects/cics.mp4" type="video/mp4">
             </video>
           </div>
+          <button class="project-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">Read more</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
           <p class="project-desc">The Cultural Institutions Collections Storage is an industrial building that houses artifacts of cultural and historical significance to South Australia. The end users of this building are History Trust, SA Museum, Department of Premier and Cabinet and SA Library. The structural detailing of this job was completed in parallel with design development to minimize program risk. This process was so meticulously planned to ensure that steel connections were carefully coordinated with the deltacore slab. For instance, all secondary steel connections to deltacore slab can only be into the cores. To facilitate the process, deltacore slab was also modelled with all the voids. Further, as part of services coordination all hangers including seismic were modelled for services and coordinated with the voids of deltacore slab. In addition to the detailed coordination within Revizto, we also utilized Cupix on the job to track progress on site and also add as a secondary layer of validation to ensure installation is in alignment with model. </p>
           <div class="project-tags"><span class="tag">Industrial</span><span class="tag">Design Coordination</span><span class="tag">Structural Detailing in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Cupix</span><span class="tag">Deltacore Slab</span><span class="tag">ACC Cloud Worksharing</span></div>
         </div>
@@ -1235,6 +1271,10 @@
               <source src="projects/anifmt.mp4" type="video/mp4">
             </video>
           </div>
+          <button class="project-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">Read more</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
           <p class="project-desc">
 Our client Australian Naval Infrastructure required a 6 storey office building and also a series of fixed and mobile towers to facilitate the bigger ship building process. The towers were the most complex in nature given the fact that we couldn't disrupt the works and as such had to be constructed offsite and transported to the facility. The offsite construction again resulted in precision detailing and coordination noting it had minimal flexibility to accommodate changes or "Fix it on site" measures. As such, each fixing point was identified and holes were predrilled in factory. Given that we had to connect this with an existing structure and it's associated services infrastructure, a point cloud scan using a terrestrial scanner was undertaken to facilitate the process. Revizto once again aided us throughout the process and it's capability to house a georeferenced point cloud along with the 3D models assisted the team greatly with coordination process. A 4D simulation (using TwinMotion) was also created to assist the stakeholders visualise the offsite construction and transportation process. (Note: Parts of this video include footage originally shared by Australian Naval Infrastructure (ANI) on LinkedIn. I was involved in the BIM and digital coordination of this project.)</p>
           <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural Detialining in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Lead Services Coordination</span><span class="tag">4D Simulation for Logistics Planning</span><span class="tag">Modular Construction</span></div>
@@ -1248,6 +1288,10 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
               <source src="projects/riverlea.mp4" type="video/mp4">
             </video>
           </div>
+          <button class="project-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">Read more</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
           <p class="project-desc">We were awarded the ECI contract for the Riverlea Retail Centre project that comprises of a series of buildings including retail shops, supermarket, childcare centre, gym and medical centre. As the ECI contractor we were responsible for design coordinating the job and also completing the structural shop drawing process concurrent with design development. We utilized Revizto as the primary coordination platform and also utilized the experience to minimize structural scope gaps and detailed level of coordination with architectural elements. Given the amount of design changes that came through during the ECI phase we also established a PowerBI dashboard that monitored the increase/decrease in major quantities (Eg. Steel tonnage, pipe run length). This dashboard helped us to justify any cost uplift that resulted as part of design changes.</p>
           <div class="project-tags"><span class="tag">Retail</span><span class="tag">Design Coordination</span><span class="tag">Structural Detailing in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span></div>
         </div>
@@ -1260,6 +1304,10 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
               <source src="projects/morialta.mp4" type="video/mp4">
             </video>
           </div>
+          <button class="project-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">Read more</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
           <p class="project-desc">Morialta Secondary School was an educational precinct comprising of two educational facilities, a gym and an admin centre. This was the first project where we established the lead services coordination role within the company in lieu of tasking this with the subcontractor team. To streamline the coordination process a BIM Execution Plan was established with a solid clash responsibility matrix. Using the logic of the clash matrix we setup our search sets and clash test sets in Revizto and utilized the advanced automation feature to ensure that clashes are assigned to the responsible party in alignment with the clash matrix. This enhanced the clash detection process and the whole clash run was automated to a great extent. In addition to just identifying hard clashes, we also added virtual inspection to our workflow that let's the user to identify issues that typically cannot be captured using the clash detection process. At the end of the job we analysed the total issues that were rectified upfront and found that hard clash detection only picks up 70-80% of the issues and the remaining can only be identified using virtual inspection.</p>
           <div class="project-tags"><span class="tag">Education</span><span class="tag">Lead Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">ACC Cloud Worksharing</span></div>
         </div>
@@ -1272,6 +1320,10 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
               <source src="projects/modular.mp4" type="video/mp4">
             </video>
           </div>
+          <button class="project-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">Read more</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
           <p class="project-desc">The modular education projects comprised of a series of school projects as part of the government's accelerated school building program. The key projects I was involved with were Mitcham Primary School, Marryatville Primary School, Victor Harbor Primary School, Gladstone Primary School, Mitcham Primary School and Mawson Lakes Primary School. As the name suggests the project utilized modular or offsite construction techniques to ensure minimal disruption to school operational hours. Given the nature of construction, detailed coordination was required from the design phase through to construction in a controlled environment and assembled on site. Navisworks Manage was used as the primary collaboration platform for clash detection and virtual inspection. Additionally, a Virtual Walkthrough session (with VR headset)was organised for the school principal and students, providing them with an immersive preview of the completed facility ahead of construction completion.</p>
           <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural & Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Navisworks</span><span class="tag">Revit & IFC Files</span><span class="tag">Model QTO</span><span class="tag">Modular Construction</span></div>
         </div>
@@ -1469,7 +1521,7 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
       // moment is actually seen; if it already took a while, don't pile
       // more waiting on top of a wait that already happened.
       var FAST_THRESHOLD_MS = 5000;
-      var EXTRA_DELAY_MS = 4000;
+      var EXTRA_DELAY_MS = 3000;
       var startedAt = window.__jjpLoaderStart || Date.now();
 
       function revealNow() {
@@ -1558,6 +1610,54 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
       }
     })();
 
+    // Hero heading: break the text into fragments that fly together into
+    // place once the page is revealed (mirrors the loader's own build-up).
+    (function () {
+      var heading = document.querySelector('.hero-heading');
+      if (!heading) return;
+      var nameEl = heading.querySelector('.name');
+      function fragmentize(el) {
+        Array.prototype.slice.call(el.childNodes).forEach(function (node) {
+          if (node.nodeType === 3) {
+            var frag = document.createDocumentFragment();
+            node.textContent.split('').forEach(function (ch) {
+              var span = document.createElement('span');
+              span.className = 'hero-frag';
+              span.textContent = ch === ' ' ? '\u00A0' : ch;
+              span.style.setProperty('--fx', (Math.random() * 200 - 100).toFixed(0) + 'px');
+              span.style.setProperty('--fy', (Math.random() * 160 - 80).toFixed(0) + 'px');
+              span.style.setProperty('--fr', (Math.random() * 160 - 80).toFixed(0) + 'deg');
+              span.style.transitionDelay = (Math.random() * 0.4).toFixed(2) + 's';
+              frag.appendChild(span);
+            });
+            el.replaceChild(frag, node);
+          } else if (node.nodeType === 1) {
+            fragmentize(node);
+          }
+        });
+      }
+      try {
+        fragmentize(heading);
+        // A nested inline-block breaks the parent's background-clip:text,
+        // so give each fragment inside the gradient name its own slice of
+        // the same gradient, based on its actual measured position.
+        if (nameEl) {
+          var nameRect = nameEl.getBoundingClientRect();
+          var totalWidth = nameRect.width;
+          Array.prototype.forEach.call(nameEl.querySelectorAll('.hero-frag'), function (span) {
+            var left = span.getBoundingClientRect().left - nameRect.left;
+            span.style.backgroundImage = 'linear-gradient(90deg, #4ecca3 0%, #a8f0da 55%, #e8edf5 100%)';
+            span.style.backgroundSize = totalWidth + 'px 100%';
+            span.style.backgroundPosition = (-left) + 'px 0';
+            span.style.webkitBackgroundClip = 'text';
+            span.style.backgroundClip = 'text';
+            span.style.webkitTextFillColor = 'transparent';
+            span.style.color = 'transparent';
+          });
+        }
+      } catch (e) {}
+    })();
+
     function closeModal(id) { document.getElementById(id).classList.remove('active'); const v = document.getElementById('workVideo'); if(v) v.pause(); }
     window.onclick = function(e) { if(e.target.classList.contains('modal-overlay')) { e.target.classList.remove('active'); const v = document.getElementById('workVideo'); if(v) v.pause(); } }
 
@@ -1607,6 +1707,15 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
         document.getElementById('expOrg').innerText = chip.dataset.tag;
         document.getElementById('expDesc').innerText = chip.dataset.desc;
         document.getElementById('expModal').classList.add('active');
+      }
+    });
+
+    document.querySelectorAll('.project-toggle').forEach(btn => {
+      btn.onclick = () => {
+        const card = btn.closest('.project-card');
+        const expanded = card.classList.toggle('expanded');
+        btn.setAttribute('aria-expanded', expanded);
+        btn.querySelector('.toggle-label').textContent = expanded ? 'Show less' : 'Read more';
       }
     });
 
