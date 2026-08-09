@@ -85,7 +85,7 @@
     }
     .loader-welcome.lit { opacity: 1; text-shadow: 0 0 16px rgba(78,204,163,0.45); }
     .loader-brand {
-      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      font-family: var(--mono); font-size: 13px; font-weight: 700;
       letter-spacing: .14em; text-transform: uppercase;
       color: var(--teal); margin-bottom: 16px;
       opacity: 0;
@@ -469,10 +469,8 @@
       display: flex; align-items: center; gap: 10px;
       font-family: var(--mono); font-size: 10px;
       color: var(--teal-dim); text-transform: uppercase; letter-spacing: .14em;
-      margin: 8px 0 16px 0;
+      margin: 32px 0 16px 0;
     }
-    .capability-group-label + .capability-chip-grid,
-    .capability-group-label ~ .capability-group-label { margin-top: 40px; }
     .capability-group-label::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
 
     .capability-feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
@@ -540,6 +538,13 @@
       background: rgba(78,204,163,0.05);
     }
     .capability-chip .capability-title { font-size: 13px; }
+    .capability-chip-arrow {
+      width: 14px; height: 14px;
+      color: var(--teal-dim);
+      margin-top: 2px;
+      transition: transform .25s ease, color .25s ease;
+    }
+    .capability-chip:hover .capability-chip-arrow { color: var(--teal); transform: translateY(2px); }
     .btn-view-work {
       align-self: flex-start;
       margin-top: 12px;
@@ -876,9 +881,7 @@
       .capability-feature-cta { margin-left: 48px; }
       .capability-chip-grid { grid-template-columns: 1fr; gap: 8px; }
       .capability-chip { padding: 12px 16px; gap: 4px; }
-      .capability-group-label { font-size: 9px; margin: 28px 0 12px 0; }
-      .capability-group-label + .capability-chip-grid,
-      .capability-group-label ~ .capability-group-label { margin-top: 28px; }
+      .capability-group-label { font-size: 9px; margin: 24px 0 12px 0; }
 
       /* Hero Tools Mobile Reductions: Scaled down 50% */
       .hero-tools-row { justify-content: flex-start; max-width: 100%; gap: 6px; }
@@ -1280,10 +1283,9 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
   <section id="skills">
     <div class="reveal">
       <p class="section-eyebrow">Digital Capability</p>
-      <h2 class="section-title">Professional Expertise</h2>
+      <h2 class="section-title" style="margin-bottom: 16px;">Professional Expertise</h2>
     </div>
     
-    <div class="capability-group-label reveal"><span>See it in action</span></div>
     <div class="capability-feature-grid reveal">
       <div class="capability-feature" data-work-title="3D Model Analytics" data-work-desc="The metadata behind the 3D model and the issue status from Revizto is exported out on a weekly basis which is automatically loaded into PowerBI. The PowerBI dashboard is setup to audit and analyze items such as Model Publish to Revizto Date, Issue Status, Clash Report, Model Growth Tracking etc. The video below shows the different items that we are tracking using PowerBI. " data-video-src="capability/powerbi.mp4">
         <div class="capability-feature-top">
@@ -1332,18 +1334,22 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
       <div class="capability-chip" data-title="Digital Delivery in accordance with ISO19650" data-tag="Framework" data-desc="Structuring and managing project information, BIM Execution Plans, and Common Data Environments (CDE) in strict alignment with ISO 19650 standards.">
         <div class="capability-tag">Framework</div>
         <h3 class="capability-title">Digital Delivery in accordance with ISO19650</h3>
+        <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
       <div class="capability-chip" data-title="Design & Project Coordination" data-tag="Management" data-desc="Hands-on experience in design coordination during both the design and construction phases, leveraging 3D models and Bluebeam.">
         <div class="capability-tag">Management</div>
         <h3 class="capability-title">Design & Project Coordination</h3>
+        <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
       <div class="capability-chip" data-title="Structural Detailing Concurrent to Design Development" data-tag="Detailed Design" data-desc="Integrating shop detailing workflows early in the design phase to reduce the overall program duration. The process is meticulously planned to ensure no scope gaps or design changes result in rework. This involves working closely with the structural detailer and consultants to ensure cross-discipline coordination. The output at the end of the design phase is a structural steel model detailed to LOD400 and ready for fabrication, with architectural section details that reflect the actual build condition.">
         <div class="capability-tag">Detailed Design</div>
         <h3 class="capability-title">Structural Detailing Concurrent to Design Development</h3>
+        <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
       <div class="capability-chip" data-title="Lead Services Coordination" data-tag="Services Coordination" data-desc="Undertake in-house lead coordinator role to faciliate shop drawing development of mechanical, electrical, hydraulic, and fire services and produce a fully coordinated and compliant model (LOD 350-400). A BIM Management Plan is agreed with the subcontractor upfront, detailing the coordination process and clash responsibility matrix. Revizto clash automation is utlized to automate majority hard clashes and streamline issue assignment. Frequent virtual inspections is undertaken to catch what automated detection misses or what the platform cannot pick.Weekly reporting of issues are distributed amongst the subcontractor team to monitor and close out the issues.">
         <div class="capability-tag">Services Coordination</div>
         <h3 class="capability-title">Lead Services Coordination</h3>
+        <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
   </section>
@@ -1463,7 +1469,7 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
       // moment is actually seen; if it already took a while, don't pile
       // more waiting on top of a wait that already happened.
       var FAST_THRESHOLD_MS = 5000;
-      var EXTRA_DELAY_MS = 2000;
+      var EXTRA_DELAY_MS = 4000;
       var startedAt = window.__jjpLoaderStart || Date.now();
 
       function revealNow() {
