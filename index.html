@@ -101,8 +101,18 @@
     .loader-status #loaderPercent { color: var(--teal); font-weight: 600; }
 
     /* ── NAV ── */
+    .brand-strip {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 101;
+      height: 26px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--teal);
+      background: rgba(13,17,23,.92);
+      border-bottom: 1px solid var(--border);
+    }
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 26px; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: center;
       padding: 0 24px;
       height: 60px;
@@ -169,7 +179,7 @@
 
     .hero-content {
       position: relative; z-index: 10;
-      padding: 60px 40px 0 40px;
+      padding: 86px 40px 0 40px;
       max-width: 900px;
       width: 100%;
     }
@@ -222,7 +232,7 @@
 
     /* ── HERO STATS + TOOLS ── */
     .hero-stats {
-      display: flex; align-items: center; gap: 32px;
+      display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap;
       margin-top: 40px; margin-bottom: 48px;
       opacity: 0;
     }
@@ -230,13 +240,9 @@
     .hero-stat-item {
       display: flex; flex-direction: column; gap: 2px;
     }
-    .hero-stat-item + .hero-stat-item {
-      padding-left: 32px;
-      border-left: 1px solid var(--border2);
-    }
     .hero-stat-number {
-      font-family: var(--sans); font-size: 28px; font-weight: 700;
-      color: var(--teal); line-height: 1;
+      font-family: var(--sans); font-size: 17px; font-weight: 700;
+      color: var(--teal); line-height: 1.3;
     }
     .hero-stat-label {
       font-size: 10px; color: var(--text-faint);
@@ -382,7 +388,7 @@
     }
 
     /* ── SECTIONS ── */
-    section:not(#hero) { padding: 80px 40px; scroll-margin-top: 76px; }
+    section:not(#hero) { padding: 80px 40px; scroll-margin-top: 102px; }
 
     .section-eyebrow {
       font-family: var(--mono); font-size: 10px;
@@ -1045,6 +1051,9 @@
   })();
   </script>
 
+  <!-- BRAND STRIP -->
+  <div class="brand-strip">Build Digital with JJP</div>
+
   <!-- NAV -->
   <nav id="nav">
     <ul class="nav-links">
@@ -1066,7 +1075,7 @@
       <h1 class="hero-heading">
         Hi, I'm <span class="name">John Jacob Paul,</span>
       </h1>
-      <p class="hero-sub">and I'm a <strong> Digital Construction Engineer </strong></p>
+      <p class="hero-sub">I'm a <strong>Digital Construction Engineer</strong>, connecting 3D models, site capture and technology to make smarter decisions before we hit the ground.</p>
       
       <!-- STATS -->
       <div class="hero-stats">
@@ -1074,16 +1083,16 @@
           <span class="hero-stat-number">7 Years in Construction</span>
         </div>
         <div class="hero-stat-item">
-          <span class="hero-stat-number">Digital Delivery</span>
+          <span class="hero-stat-number">Digital Delivery | Design Management | Construction Coordination</span>
         </div>
         <div class="hero-stat-item">
-          <span class="hero-stat-number">Design & Project Coordination</span>
+          <span class="hero-stat-number">Guest Lecturer @ Adelaide University</span>
         </div>
       </div>
 
       <!-- TOOLS -->
       <div class="hero-tools-strip">
-        <p class="hero-tools-label">TECH STACK <span class="tools-hint">(Tap badges for more info)</span></p>
+        <p class="hero-tools-label">CORE ECOSYSTEM <span class="tools-hint">(Tap badges for more info)</span></p>
         <div class="hero-tools-row">
           
           <!-- Row 1 -->
@@ -1170,7 +1179,7 @@
       <div class="about-body">
         <p class="section-eyebrow">About</p>
         <h2 class="section-title">Civil Engineering<br>meets Digital.</h2>
-        <p>I have a background in <strong>Civil Engineering and Construction Management</strong>, with a strong focus on digital coordination and construction technology. Based in South Australia, I currently work at Sarah Constructions where I manage digital delivery across the full project lifecycle from early design through to construction.</p>
+        <p>With a Bachelors Degree in <strong>Civil Engineering</strong> and a Masters Degree in <strong>Construction Management</strong>, I bring a strong focus on digital coordination and construction technology. Based in South Australia, I currently work at Sarah Constructions where I manage digital delivery across the full project lifecycle from early design through to construction.</p>
         <p>I leverage technical expertise in <strong>Revizto, Revit, Navisworks, Autodesk Forma, and Bluebeam</strong> to plan and structure workflows that streamline collaboration and proactively identify issues before they arise on site</p>
         <p>My work extends into <strong>spatial validation</strong> using Cupix and drone-captured point clouds to align site conditions with design intent, as well as <strong>model data analytics</strong> via Revizto, Autodesk Data Exchange, and Power BI to enable predictive analysis and data-driven decision making.</p>
       </div>
@@ -1451,10 +1460,11 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
       var barFill = document.getElementById('loaderBarFill');
       var percentEl = document.getElementById('loaderPercent');
       var statusText = document.getElementById('loaderStatusText');
-      // The building+crane assembly and welcome sequence takes about this
-      // long to play out — the reveal waits for whichever finishes last:
-      // real media readiness, or this minimum so the intro is never cut short.
-      var MIN_DISPLAY_MS = 2800;
+      // If the real load finishes fast, add a short pause so the welcome
+      // moment is actually seen; if it already took a while, don't pile
+      // more waiting on top of a wait that already happened.
+      var FAST_THRESHOLD_MS = 5000;
+      var EXTRA_DELAY_MS = 2000;
       var startedAt = window.__jjpLoaderStart || Date.now();
 
       function revealNow() {
@@ -1473,8 +1483,8 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
       }
 
       function finishLoading() {
-        var remaining = MIN_DISPLAY_MS - (Date.now() - startedAt);
-        if (remaining > 0) { setTimeout(revealNow, remaining); } else { revealNow(); }
+        var elapsed = Date.now() - startedAt;
+        if (elapsed < FAST_THRESHOLD_MS) { setTimeout(revealNow, EXTRA_DELAY_MS); } else { revealNow(); }
       }
 
       try {
