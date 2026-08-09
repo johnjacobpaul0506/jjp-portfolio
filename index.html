@@ -650,7 +650,7 @@
       align-self: flex-start;
       background: none; border: none; padding: 4px 0;
       margin-top: -4px; margin-bottom: 4px;
-      color: var(--teal-dim);
+      color: var(--teal);
       font-family: var(--mono); font-size: 10px;
       text-transform: uppercase; letter-spacing: .06em;
       cursor: pointer;
@@ -659,9 +659,9 @@
     .project-card.expanded .project-toggle svg { transform: rotate(180deg); }
     .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .tag {
-      font-size: 10px; color: var(--teal-dim);
-      background: rgba(78,204,163,0.08);
-      border: 1px solid rgba(78,204,163,0.15);
+      font-size: 10px; color: var(--text-faint);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border2);
       padding: 3px 10px; border-radius: 20px;
       letter-spacing: .04em;
     }
@@ -860,7 +860,7 @@
       .hero-heading { font-size: clamp(24px, 10vw, 42px); }
       .hero-stats { gap: 20px; flex-direction: column; align-items: flex-start; margin-bottom: 24px; }
       .hero-stat-item + .hero-stat-item { padding-left: 0; border-left: none; border-top: 1px solid var(--border2); padding-top: 20px; width: 100%; }
-      .hero-stat-number { font-size: 8.5px; white-space: nowrap; }
+      .hero-stat-number { font-size: 11px; }
 
       /* Bring City Canvas up and heavily blend the bottom sharp line */
       #cityCanvas {
@@ -1237,7 +1237,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <p class="project-desc">This is the ongoing superschool project in the northern suburbs of South Australia comprising of 4 learning centres, gym, admin centre, cultural building and a significant area of landscape and play areas. Revizto was setup in the design for coordination and collaboration between the contractor and consultants. The Digital Delivery component of this project required compliance with ISO19650 and Project Specific BIM Brief developed by the Department of Infrastructure & Transport. The design models were developed to LOD 300 making it quite reliable for Quantity Takeoffs to great extent. As the lead managing the Digital Delivery process throughout construction phase, we also setup a Revit container file to host all the discipline Revit models. To automate the process of auditing against the BIM Execution Plan, custom scripting using PyRevit was utilized to ensure consistency in grid/level alignment across the various models. PowerBI dashboards have also been setup for the job to monitor changes to the model throughout construction phase.</p>
-          <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural & Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Automated Revit Model Audits</span><span class="tag">Reality Capture</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span></div>
+          <div class="project-tags"><span class="tag">Structural & Services Coordination</span><span class="tag">Automated Revit Model Audits</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span><span class="tag">Design Coordination</span><span class="tag">Revit & IFC Files</span><span class="tag">Reality Capture</span><span class="tag">Education</span><span class="tag">ISO19650</span><span class="tag">Revizto</span></div>
         </div>
       </div>
       <div class="project-card">
@@ -1253,7 +1253,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <p class="project-desc">The Cultural Institutions Collections Storage is an industrial building that houses artifacts of cultural and historical significance to South Australia. The end users of this building are History Trust, SA Museum, Department of Premier and Cabinet and SA Library. The structural detailing of this job was completed in parallel with design development to minimize program risk. This process was so meticulously planned to ensure that steel connections were carefully coordinated with the deltacore slab. For instance, all secondary steel connections to deltacore slab can only be into the cores. To facilitate the process, deltacore slab was also modelled with all the voids. Further, as part of services coordination all hangers including seismic were modelled for services and coordinated with the voids of deltacore slab. In addition to the detailed coordination within Revizto, we also utilized Cupix on the job to track progress on site and also add as a secondary layer of validation to ensure installation is in alignment with model. </p>
-          <div class="project-tags"><span class="tag">Industrial</span><span class="tag">Design Coordination</span><span class="tag">Structural Detailing in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Cupix</span><span class="tag">Deltacore Slab</span><span class="tag">ACC Cloud Worksharing</span></div>
+          <div class="project-tags"><span class="tag">Structural Detailing in Design Phase</span><span class="tag">ACC Cloud Worksharing</span><span class="tag">Design Coordination</span><span class="tag">Revit & IFC Files</span><span class="tag">Deltacore Slab</span><span class="tag">Industrial</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Cupix</span></div>
         </div>
       </div>
       <div class="project-card">
@@ -1270,7 +1270,7 @@
           </button>
           <p class="project-desc">
 Our client Australian Naval Infrastructure required a 6 storey office building and also a series of fixed and mobile towers to facilitate the bigger ship building process. The towers were the most complex in nature given the fact that we couldn't disrupt the works and as such had to be constructed offsite and transported to the facility. The offsite construction again resulted in precision detailing and coordination noting it had minimal flexibility to accommodate changes or "Fix it on site" measures. As such, each fixing point was identified and holes were predrilled in factory. Given that we had to connect this with an existing structure and it's associated services infrastructure, a point cloud scan using a terrestrial scanner was undertaken to facilitate the process. Revizto once again aided us throughout the process and it's capability to house a georeferenced point cloud along with the 3D models assisted the team greatly with coordination process. A 4D simulation (using TwinMotion) was also created to assist the stakeholders visualise the offsite construction and transportation process. (Note: Parts of this video include footage originally shared by Australian Naval Infrastructure (ANI) on LinkedIn. I was involved in the BIM and digital coordination of this project.)</p>
-          <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural Detialining in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Lead Services Coordination</span><span class="tag">4D Simulation for Logistics Planning</span><span class="tag">Modular Construction</span></div>
+          <div class="project-tags"><span class="tag">Structural Detialining in Design Phase</span><span class="tag">4D Simulation for Logistics Planning</span><span class="tag">Lead Services Coordination</span><span class="tag">Modular Construction</span><span class="tag">Design Coordination</span><span class="tag">Revit & IFC Files</span><span class="tag">Education</span><span class="tag">ISO19650</span><span class="tag">Revizto</span></div>
         </div>
       </div>
       <div class="project-card">
@@ -1286,7 +1286,7 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <p class="project-desc">We were awarded the ECI contract for the Riverlea Retail Centre project that comprises of a series of buildings including retail shops, supermarket, childcare centre, gym and medical centre. As the ECI contractor we were responsible for design coordinating the job and also completing the structural shop drawing process concurrent with design development. We utilized Revizto as the primary coordination platform and also utilized the experience to minimize structural scope gaps and detailed level of coordination with architectural elements. Given the amount of design changes that came through during the ECI phase we also established a PowerBI dashboard that monitored the increase/decrease in major quantities (Eg. Steel tonnage, pipe run length). This dashboard helped us to justify any cost uplift that resulted as part of design changes.</p>
-          <div class="project-tags"><span class="tag">Retail</span><span class="tag">Design Coordination</span><span class="tag">Structural Detailing in Design Phase</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span></div>
+          <div class="project-tags"><span class="tag">Structural Detailing in Design Phase</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span><span class="tag">Design Coordination</span><span class="tag">Revit & IFC Files</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Retail</span></div>
         </div>
       </div>
       <div class="project-card">
@@ -1302,7 +1302,7 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <p class="project-desc">Morialta Secondary School was an educational precinct comprising of two educational facilities, a gym and an admin centre. This was the first project where we established the lead services coordination role within the company in lieu of tasking this with the subcontractor team. To streamline the coordination process a BIM Execution Plan was established with a solid clash responsibility matrix. Using the logic of the clash matrix we setup our search sets and clash test sets in Revizto and utilized the advanced automation feature to ensure that clashes are assigned to the responsible party in alignment with the clash matrix. This enhanced the clash detection process and the whole clash run was automated to a great extent. In addition to just identifying hard clashes, we also added virtual inspection to our workflow that let's the user to identify issues that typically cannot be captured using the clash detection process. At the end of the job we analysed the total issues that were rectified upfront and found that hard clash detection only picks up 70-80% of the issues and the remaining can only be identified using virtual inspection.</p>
-          <div class="project-tags"><span class="tag">Education</span><span class="tag">Lead Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Revizto</span><span class="tag">Revit & IFC Files</span><span class="tag">ACC Cloud Worksharing</span></div>
+          <div class="project-tags"><span class="tag">Lead Services Coordination</span><span class="tag">ACC Cloud Worksharing</span><span class="tag">Revit & IFC Files</span><span class="tag">Education</span><span class="tag">ISO19650</span><span class="tag">Revizto</span></div>
         </div>
       </div>
       <div class="project-card">
@@ -1318,7 +1318,7 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <p class="project-desc">The modular education projects comprised of a series of school projects as part of the government's accelerated school building program. The key projects I was involved with were Mitcham Primary School, Marryatville Primary School, Victor Harbor Primary School, Gladstone Primary School, Mitcham Primary School and Mawson Lakes Primary School. As the name suggests the project utilized modular or offsite construction techniques to ensure minimal disruption to school operational hours. Given the nature of construction, detailed coordination was required from the design phase through to construction in a controlled environment and assembled on site. Navisworks Manage was used as the primary collaboration platform for clash detection and virtual inspection. Additionally, a Virtual Walkthrough session (with VR headset)was organised for the school principal and students, providing them with an immersive preview of the completed facility ahead of construction completion.</p>
-          <div class="project-tags"><span class="tag">Education</span><span class="tag">Design Coordination</span><span class="tag">Structural & Services Coordination</span><span class="tag">ISO19650</span><span class="tag">Navisworks</span><span class="tag">Revit & IFC Files</span><span class="tag">Model QTO</span><span class="tag">Modular Construction</span></div>
+          <div class="project-tags"><span class="tag">Structural & Services Coordination</span><span class="tag">Modular Construction</span><span class="tag">Design Coordination</span><span class="tag">Revit & IFC Files</span><span class="tag">Navisworks</span><span class="tag">Education</span><span class="tag">Model QTO</span><span class="tag">ISO19650</span></div>
         </div>
       </div>
     </div>
