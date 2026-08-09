@@ -84,6 +84,14 @@
       transition: opacity .9s ease, text-shadow .9s ease;
     }
     .loader-welcome.lit { opacity: 1; text-shadow: 0 0 16px rgba(78,204,163,0.45); }
+    .loader-brand {
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 16px;
+      opacity: 0;
+      transition: opacity .7s ease;
+    }
+    .loader-brand.visible { opacity: 1; }
     .loader-bar-track {
       width: 100%; height: 3px; background: var(--border2);
       border-radius: 3px; overflow: hidden;
@@ -101,18 +109,8 @@
     .loader-status #loaderPercent { color: var(--teal); font-weight: 600; }
 
     /* ── NAV ── */
-    .brand-strip {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 101;
-      height: 26px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--mono); font-size: 10px; font-weight: 700;
-      letter-spacing: .14em; text-transform: uppercase;
-      color: var(--teal);
-      background: rgba(13,17,23,.92);
-      border-bottom: 1px solid var(--border);
-    }
     nav {
-      position: fixed; top: 26px; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: center;
       padding: 0 24px;
       height: 60px;
@@ -179,7 +177,7 @@
 
     .hero-content {
       position: relative; z-index: 10;
-      padding: 86px 40px 0 40px;
+      padding: 60px 40px 0 40px;
       max-width: 900px;
       width: 100%;
     }
@@ -209,6 +207,7 @@
       line-height: 1.5;
     }
     body.media-ready .hero-sub { animation: fadeUp .6s .5s forwards; }
+    .hero-sub-detail { font-size: .8em; }
 
     .hero-scroll {
       position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
@@ -388,7 +387,7 @@
     }
 
     /* ── SECTIONS ── */
-    section:not(#hero) { padding: 80px 40px; scroll-margin-top: 102px; }
+    section:not(#hero) { padding: 80px 40px; scroll-margin-top: 76px; }
 
     .section-eyebrow {
       font-family: var(--mono); font-size: 10px;
@@ -926,6 +925,7 @@
   <!-- MEDIA PRELOADER -->
   <div id="mediaLoader" class="media-loader" role="status" aria-live="polite">
     <div class="loader-inner">
+      <p class="loader-brand" id="loaderBrand">Build Digital with JJP</p>
       <svg class="loader-building" viewBox="0 0 300 215" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g id="loaderBuildingLines"></g>
         <g id="loaderBuildingWindows"></g>
@@ -951,6 +951,7 @@
     var g = document.getElementById('loaderBuildingLines');
     var wg = document.getElementById('loaderBuildingWindows');
     var welcomeEl = document.getElementById('loaderWelcome');
+    var brandEl = document.getElementById('loaderBrand');
     if (!g) return;
     var svgNS = 'http://www.w3.org/2000/svg';
 
@@ -1031,6 +1032,7 @@
               w.classList.add('visible');
             });
           }
+          if (brandEl) brandEl.classList.add('visible');
         });
       });
 
@@ -1050,9 +1052,6 @@
     } catch (e) {}
   })();
   </script>
-
-  <!-- BRAND STRIP -->
-  <div class="brand-strip">Build Digital with JJP</div>
 
   <!-- NAV -->
   <nav id="nav">
@@ -1075,7 +1074,7 @@
       <h1 class="hero-heading">
         Hi, I'm <span class="name">John Jacob Paul,</span>
       </h1>
-      <p class="hero-sub">I'm a <strong>Digital Construction Engineer</strong>, connecting 3D models, site capture and technology to make smarter decisions before we hit the ground.</p>
+      <p class="hero-sub">I'm a <strong>Digital Construction Engineer</strong>, <span class="hero-sub-detail">connecting 3D models, site capture and technology to make smarter decisions before we hit the ground.</span></p>
       
       <!-- STATS -->
       <div class="hero-stats">
