@@ -231,7 +231,7 @@
 
     /* ── HERO STATS + TOOLS ── */
     .hero-stats {
-      display: flex; flex-direction: column; align-items: flex-start; gap: 20px;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 32px;
       margin-top: 40px; margin-bottom: 48px;
       opacity: 0;
     }
@@ -396,6 +396,19 @@
       display: flex; align-items: center; gap: 10px;
     }
     .section-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--teal); }
+
+    /* ── BRANCH 3 ── */
+    .story-stat-bridge {
+      background: rgba(78,204,163,0.045);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 36px 40px; text-align: center;
+    }
+    .story-stat-bridge p { max-width: 640px; margin: 0 auto; font-size: 15px; color: var(--text-dim); line-height: 1.6; }
+    .story-stat-num { font-family: var(--sans); font-weight: 700; font-size: 21px; color: var(--teal); }
+    .capability-proof {
+      font-family: var(--mono); font-size: 9px; color: var(--text-faint);
+      letter-spacing: .03em; margin-top: 3px; display: block;
+    }
     .section-title {
       font-family: var(--sans); font-weight: 700;
       font-size: clamp(24px, 3.5vw, 42px); line-height: 1.1;
@@ -472,13 +485,49 @@
       margin: 32px 0 16px 0;
     }
     .capability-group-label::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+    .toolkit-pitch {
+      font-size: 12px; color: var(--text-dim); line-height: 1.5;
+      margin: -8px 0 16px 0; max-width: 480px;
+    }
+    .build-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .build-card {
+      background: rgba(21,31,46,0.4);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 14px;
+      cursor: pointer;
+      transition: transform .25s, border-color .25s, background .25s;
+    }
+    .build-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(78,204,163,0.3);
+      background: rgba(78,204,163,0.04);
+    }
+    .build-lock { width: 13px; height: 13px; color: var(--text-faint); margin-bottom: 8px; display: block; transition: color .25s; }
+    .build-card:hover .build-lock { color: var(--teal-dim); }
+    .build-name { font-family: var(--sans); font-size: 12.5px; font-weight: 600; color: var(--text); margin: 0 0 4px 0; line-height: 1.3; }
+    .build-desc { font-size: 10.5px; color: var(--text-faint); line-height: 1.4; margin: 0; }
+    .build-contact-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 18px;
+      font-family: var(--mono); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: #0d1117; background: var(--teal);
+      padding: 9px 18px; border-radius: 20px;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .build-contact-btn:hover { background: #5fddbb; transform: translateY(-1px); }
 
     .capability-feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     .capability-feature {
+      --accent: var(--teal);
+      --accent-soft: rgba(78,204,163,0.12);
+      --accent-border: rgba(78,204,163,0.4);
       display: flex; flex-direction: column; gap: 10px;
       background: transparent;
       border: 1px solid rgba(78,204,163,0.2);
-      border-left: 3px solid var(--teal);
+      border-left: 3px solid var(--accent);
       border-radius: 8px;
       padding: 14px 16px;
       cursor: pointer;
@@ -486,29 +535,29 @@
     }
     .capability-feature:hover {
       transform: translateY(-3px);
-      border-color: rgba(78,204,163,0.45);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.28), 0 4px 12px rgba(78,204,163,0.08);
+      border-color: var(--accent-border);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.28), 0 4px 12px var(--accent-soft);
     }
     .capability-feature-top { display: flex; align-items: center; gap: 14px; }
     .capability-feature-play {
-      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
-      background: rgba(78,204,163,0.12);
-      border: 1px solid rgba(78,204,163,0.4);
+      width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
       display: flex; align-items: center; justify-content: center;
       transition: background .25s, transform .25s;
     }
-    .capability-feature-play svg { width: 13px; height: 13px; fill: var(--teal); margin-left: 1px; transition: fill .25s; }
-    .capability-feature:hover .capability-feature-play { background: var(--teal); transform: scale(1.08); }
-    .capability-feature:hover .capability-feature-play svg { fill: #0d1117; }
+    .capability-feature-play svg { width: 18px; height: 18px; stroke: var(--accent); transition: stroke .25s; }
+    .capability-feature:hover .capability-feature-play { background: var(--accent); transform: scale(1.08); }
+    .capability-feature:hover .capability-feature-play svg { stroke: #0d1117; }
     .capability-feature-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
     .capability-feature-cta {
       align-self: flex-start;
-      margin-left: 52px;
+      margin-left: 56px;
       display: inline-flex; align-items: center; gap: 6px;
       font-family: var(--mono); font-size: 10px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .08em;
       color: #0d1117;
-      background: var(--teal);
+      background: var(--accent);
       padding: 7px 14px;
       border-radius: 20px;
       transition: background .2s, transform .2s, box-shadow .2s;
@@ -517,12 +566,12 @@
     }
     .capability-feature-cta::before { content: '▶'; font-size: 8px; }
     .capability-feature:hover .capability-feature-cta {
-      background: #5fddbb;
-      box-shadow: 0 4px 14px rgba(78,204,163,0.35);
+      filter: brightness(1.12);
+      box-shadow: 0 4px 14px var(--accent-soft);
       animation: none;
     }
 
-    .capability-chip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .capability-chip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .capability-chip {
       background: rgba(21,31,46,0.5);
       border: 1px solid var(--border2);
@@ -538,6 +587,9 @@
       background: rgba(78,204,163,0.05);
     }
     .capability-chip .capability-title { font-size: 13px; }
+    .capability-chip-head { display: flex; align-items: center; gap: 7px; }
+    .capability-chip-icon { width: 15px; height: 15px; color: var(--teal-dim); flex-shrink: 0; transition: color .25s; }
+    .capability-chip:hover .capability-chip-icon { color: var(--teal); }
     .capability-chip-arrow {
       width: 14px; height: 14px;
       color: var(--teal-dim);
@@ -657,6 +709,16 @@
     }
     .project-toggle svg { width: 12px; height: 12px; transition: transform .25s ease; }
     .project-card.expanded .project-toggle svg { transform: rotate(180deg); }
+    .project-award {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(212,175,55,0.08);
+      border-left: 2px solid #d4af37;
+      padding: 10px 14px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .project-award-icon { width: 18px; height: 18px; color: #d4af37; flex-shrink: 0; }
+    .project-award-text { font-size: 11.5px; color: var(--text-dim); line-height: 1.4; }
     .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .tag {
       font-size: 10px; color: var(--text-faint);
@@ -831,6 +893,7 @@
       .hero-content { padding: 40px; }
       section:not(#hero) { padding: 60px 24px; }
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-cards { display: none; }
     }
 
     @media (max-width: 768px) {
@@ -899,10 +962,16 @@
          shrink further so the section reads as scannable, not a wall of text */
       .capability-feature-grid { grid-template-columns: 1fr; }
       .capability-feature { padding: 12px 14px; }
-      .capability-feature-cta { margin-left: 48px; }
+      .capability-feature-cta { margin-left: 52px; }
       .capability-chip-grid { grid-template-columns: 1fr; gap: 8px; }
       .capability-chip { padding: 12px 16px; gap: 4px; }
       .capability-group-label { font-size: 9px; margin: 24px 0 12px 0; }
+      .toolkit-pitch { font-size: 11px; margin: -6px 0 14px 0; }
+      .build-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .build-grid .build-card:nth-child(5) { grid-column: 1 / -1; }
+      .story-stat-bridge { padding: 28px 24px; }
+      .story-stat-bridge p { font-size: 13px; }
+      .story-stat-num { font-size: 18px; }
 
       /* Hero Tools Mobile Reductions: Scaled down 50% */
       .hero-tools-row { justify-content: flex-start; max-width: 100%; gap: 6px; }
@@ -1103,10 +1172,10 @@
       <!-- STATS -->
       <div class="hero-stats">
         <div class="hero-stat-item">
-          <span class="hero-stat-number">7 Years in Construction</span>
+          <span class="hero-stat-number">7 Years in Construction Industry</span>
         </div>
         <div class="hero-stat-item">
-          <span class="hero-stat-number">Digital Delivery | Design Coordination | Construction Technology</span>
+          <span class="hero-stat-number">5+ Years in Digital Delivery & Design Management</span>
         </div>
         <div class="hero-stat-item">
           <span class="hero-stat-number">Guest Lecturer @ Adelaide University</span>
@@ -1243,6 +1312,10 @@
       <div class="project-card">
         <div class="project-content">
           <div class="project-title">2024 - 2025 | Cultural Institutions Collections Storage <span class="project-val">$65M</span></div>
+          <div class="project-award">
+            <svg class="project-award-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z"/><path d="M7 5H4a1 1 0 00-1 1v1a4 4 0 004 4M17 5h3a1 1 0 011 1v1a4 4 0 01-4 4"/></svg>
+            <span class="project-award-text">Winner: Master Builders Building Excellence Award 2026, Industrial Building over $10M</span>
+          </div>
           <div class="project-media">
             <video autoplay loop muted playsinline poster="placeholder2.jpg" preload="auto">
               <source src="projects/cics.mp4" type="video/mp4">
@@ -1324,6 +1397,11 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
     </div>
   </section>
 
+  <!-- STORY BRIDGE -->
+  <div class="story-stat-bridge reveal">
+    <p><span class="story-stat-num">$435M+</span> delivered across those 6 projects — all running on the same connected workflow, from a modular schools program to a $155M superschool.</p>
+  </div>
+
   <!-- DIGITAL CAPABILITY -->
   <section id="skills">
     <div class="reveal">
@@ -1331,69 +1409,94 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
       <h2 class="section-title" style="margin-bottom: 16px;">Professional Expertise</h2>
     </div>
     
+    <div class="capability-group-label reveal"><span>Beyond 3D Models</span></div>
     <div class="capability-feature-grid reveal">
-      <div class="capability-feature" data-work-title="3D Model Analytics" data-work-desc="The metadata behind the 3D model and the issue status from Revizto is exported out on a weekly basis which is automatically loaded into PowerBI. The PowerBI dashboard is setup to audit and analyze items such as Model Publish to Revizto Date, Issue Status, Clash Report, Model Growth Tracking etc. The video below shows the different items that we are tracking using PowerBI. " data-video-src="capability/powerbi.mp4">
+      <div class="capability-feature" style="--accent:#4ecca3; --accent-soft:rgba(78,204,163,0.12); --accent-border:rgba(78,204,163,0.4);" data-work-title="Revizto Issue Tracking & Management Dashboard" data-work-desc="The metadata behind the 3D model and the issue status from Revizto is exported out on a weekly basis which is automatically loaded into PowerBI. The PowerBI dashboard is setup to audit and analyze items such as Model Publish to Revizto Date, Issue Status, Clash Report, Model Growth Tracking etc. The video below shows the different items that we are tracking using PowerBI. " data-video-src="capability/powerbi.mp4">
         <div class="capability-feature-top">
-          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 19v-6"/><path d="M12 19V7"/><path d="M17 19v-9"/></svg></div>
           <div class="capability-feature-body">
             <div class="capability-tag">Analytics</div>
-            <h3 class="capability-title">3D Model Analytics & Insights</h3>
+            <h3 class="capability-title">Revizto Issue Tracking & Management Dashboard</h3>
+            <span class="capability-proof">Proven on New Northern Suburbs High Schools</span>
           </div>
         </div>
         <span class="capability-feature-cta">Watch Demo</span>
       </div>
-      <div class="capability-feature" data-work-title="Quantity Takeoffs" data-work-desc="Quantities are exported either from Revit or Revizto (using a combination of search sets, presets and favorite properties). These are then exported out as an excel file for further use. When required, the export file is loaded to PowerBI and exporting is undertaken on a weekly basis to monitor the change in model quantities. The video below shows how structural quantities are exported from Revizto and loaded into PowerBI giving the end user the ability to select a project and get the associated Bill of Materials." data-video-src="capability/qto.mp4">
+      <div class="capability-feature" style="--accent:#4eb8cc; --accent-soft:rgba(78,184,204,0.12); --accent-border:rgba(78,184,204,0.4);" data-work-title="Quantity Takeoffs" data-work-desc="Quantities are exported either from Revit or Revizto (using a combination of search sets, presets and favorite properties). These are then exported out as an excel file for further use. When required, the export file is loaded to PowerBI and exporting is undertaken on a weekly basis to monitor the change in model quantities. The video below shows how structural quantities are exported from Revizto and loaded into PowerBI giving the end user the ability to select a project and get the associated Bill of Materials." data-video-src="capability/qto.mp4">
         <div class="capability-feature-top">
-          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="1.5"/><path d="M9 4V3a1 1 0 011-1h4a1 1 0 011 1v1"/><path d="M9 11l2 2 4-4"/></svg></div>
           <div class="capability-feature-body">
             <div class="capability-tag">Cost Estimation</div>
             <h3 class="capability-title">Quantity Takeoffs</h3>
+            <span class="capability-proof">Proven on Riverlea Retail Centre</span>
           </div>
         </div>
         <span class="capability-feature-cta">Watch Demo</span>
       </div>
-      <div class="capability-feature" data-work-title="Revit Automation" data-work-desc="The video below shows how I am using the audit function within a revit container model to validate Grid Alignment across all the discipline models. The workflow involes exporting the data as an xlsx file from revit which is loaded into a web based dashboard for automated analytics." data-video-src="capability/pyrevit.mp4">
+      <div class="capability-feature" style="--accent:#4e95cc; --accent-soft:rgba(78,149,204,0.12); --accent-border:rgba(78,149,204,0.4);" data-work-title="Grids and Levels Audit using PyRevit Custom Addin" data-work-desc="The video below shows how I am using the audit function within a revit container model to validate Grid Alignment across all the discipline models. The workflow involes exporting the data as an xlsx file from revit which is loaded into a web based dashboard for automated analytics." data-video-src="capability/pyrevit.mp4">
         <div class="capability-feature-top">
-          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3.5v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9v-5L12 3z"/><path d="M9 12l2 2 4-4.5"/></svg></div>
           <div class="capability-feature-body">
             <div class="capability-tag">Automation</div>
-            <h3 class="capability-title">Automated Model Auditing using PyRevit & Web based dasbhoards</h3>
+            <h3 class="capability-title">Grids and Levels Audit using PyRevit Custom Addin</h3>
+            <span class="capability-proof">Proven on New Northern Suburbs High Schools</span>
           </div>
         </div>
         <span class="capability-feature-cta">Watch Demo</span>
       </div>
-      <div class="capability-feature" data-work-title="Reality Capture" data-work-desc="My experience with Reality Captures ranges from drone mapping to 360 image captures. Drone flight is undertaken (in accordance with CASA regulations) over the project site and the photos are converted to a georeferenced point cloud and an orthomosaic using Agisoft Metashape. Further, for the interior of the building a 360 camera is used alongside Cupix/DroneDeploy to capture the progress on site. The video below shows I have used drone captures and 360 cameras for as built validation." data-video-src="capability/realitycapture.mp4">
+      <div class="capability-feature" style="--accent:#8a7ecc; --accent-soft:rgba(138,126,204,0.12); --accent-border:rgba(138,126,204,0.4);" data-work-title="Reality Capture" data-work-desc="My experience with Reality Captures ranges from drone mapping to 360 image captures. Drone flight is undertaken (in accordance with CASA regulations) over the project site and the photos are converted to a georeferenced point cloud and an orthomosaic using Agisoft Metashape. Further, for the interior of the building a 360 camera is used alongside Cupix/DroneDeploy to capture the progress on site. The video below shows I have used drone captures and 360 cameras for as built validation." data-video-src="capability/realitycapture.mp4">
         <div class="capability-feature-top">
-          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="capability-feature-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.2"/><path d="M12 9.8L6.5 6M12 9.8L17.5 6M12 14.2L6.5 18M12 14.2L17.5 18"/><circle cx="6" cy="5.5" r="1.8"/><circle cx="18" cy="5.5" r="1.8"/><circle cx="6" cy="18.5" r="1.8"/><circle cx="18" cy="18.5" r="1.8"/></svg></div>
           <div class="capability-feature-body">
             <div class="capability-tag">Reality Capture</div>
             <h3 class="capability-title">Reality Capture using Drones & 360 Cameras</h3>
+            <span class="capability-proof">Proven on Cultural Institutions Collections Storage</span>
           </div>
         </div>
         <span class="capability-feature-cta">Watch Demo</span>
       </div>
     </div>
 
-    <div class="capability-group-label reveal"><span>Also in the toolkit</span></div>
+    <p class="toolkit-pitch" style="margin-top: 28px;">A few internal tools I've built along the way. Reach out for a walkthrough.</p>
+    <div class="build-grid reveal">
+      <div class="build-card" data-tool="Revizto Search Set Generator" data-desc="Generate batch XML search sets for Revizto/Navisworks.">
+        <svg class="build-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+        <h3 class="build-name">Revizto Search Set Generator</h3>
+        <p class="build-desc">Generate batch XML search sets for Revizto/Navisworks.</p>
+      </div>
+      <div class="build-card" data-tool="2D Audit: Aconex vs Revizto" data-desc="Compare and audit 2D drawing sets between Aconex and Revizto.">
+        <svg class="build-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+        <h3 class="build-name">2D Audit: Aconex vs Revizto</h3>
+        <p class="build-desc">Compare and audit 2D drawing sets between Aconex and Revizto.</p>
+      </div>
+      <div class="build-card" data-tool="Aconex Document Transmittal Tracker" data-desc="Track and manage Aconex document transmittals across your project.">
+        <svg class="build-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+        <h3 class="build-name">Aconex Document Transmittal Tracker</h3>
+        <p class="build-desc">Track and manage Aconex document transmittals across your project.</p>
+      </div>
+      <div class="build-card" data-tool="Bulk Rename File" data-desc="Batch rename files quickly and efficiently using custom rules and patterns.">
+        <svg class="build-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+        <h3 class="build-name">Bulk Rename File</h3>
+        <p class="build-desc">Batch rename files quickly and efficiently using custom rules and patterns.</p>
+      </div>
+    </div>
+
+    <div class="capability-group-label reveal" style="margin-top: 40px;"><span>The Fundamentals</span></div>
+    <p class="toolkit-pitch">The everyday fundamentals: solid BIM coordination, applied on every project.</p>
     <div class="capability-chip-grid reveal">
       <div class="capability-chip" data-title="Digital Delivery in accordance with ISO19650" data-tag="Framework" data-desc="Structuring and managing project information, BIM Execution Plans, and Common Data Environments (CDE) in strict alignment with ISO 19650 standards.">
         <div class="capability-tag">Framework</div>
         <h3 class="capability-title">Digital Delivery in accordance with ISO19650</h3>
         <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="capability-chip" data-title="Design & Project Coordination" data-tag="Management" data-desc="Hands-on experience in design coordination during both the design and construction phases, leveraging 3D models and Bluebeam.">
-        <div class="capability-tag">Management</div>
-        <h3 class="capability-title">Design & Project Coordination</h3>
+      <div class="capability-chip" data-title="Lead the design model development in accordance with the BIM Management Plan during the ECI phase." data-tag="Design Management" data-desc="Hands-on experience in design coordination during both the design and construction phases, leveraging 3D models and Bluebeam.">
+        <div class="capability-tag">Design Management</div>
+        <h3 class="capability-title">Lead the design model development in accordance with the BIM Management Plan during the ECI phase.</h3>
         <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="capability-chip" data-title="Structural Detailing Concurrent to Design Development" data-tag="Detailed Design" data-desc="Integrating shop detailing workflows early in the design phase to reduce the overall program duration. The process is meticulously planned to ensure no scope gaps or design changes result in rework. This involves working closely with the structural detailer and consultants to ensure cross-discipline coordination. The output at the end of the design phase is a structural steel model detailed to LOD400 and ready for fabrication, with architectural section details that reflect the actual build condition.">
-        <div class="capability-tag">Detailed Design</div>
-        <h3 class="capability-title">Structural Detailing Concurrent to Design Development</h3>
-        <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-      <div class="capability-chip" data-title="Lead Services Coordination" data-tag="Services Coordination" data-desc="Undertake in-house lead coordinator role to faciliate shop drawing development of mechanical, electrical, hydraulic, and fire services and produce a fully coordinated and compliant model (LOD 350-400). A BIM Management Plan is agreed with the subcontractor upfront, detailing the coordination process and clash responsibility matrix. Revizto clash automation is utlized to automate majority hard clashes and streamline issue assignment. Frequent virtual inspections is undertaken to catch what automated detection misses or what the platform cannot pick.Weekly reporting of issues are distributed amongst the subcontractor team to monitor and close out the issues.">
-        <div class="capability-tag">Services Coordination</div>
-        <h3 class="capability-title">Lead Services Coordination</h3>
+      <div class="capability-chip" data-title="Lead the coordination and development of structural and services models to LOD 350-400." data-tag="Construction Coordination" data-desc="Coordinating shop drawing development across structural, mechanical, electrical, hydraulic, and fire services to LOD 350-400. Structural detailing runs concurrently with design to avoid rework, while services coordination follows an agreed BIM Management Plan and clash matrix, with Revizto automating the majority of hard clashes and virtual inspections and weekly reporting closing out what's left.">
+        <div class="capability-tag">Construction Coordination</div>
+        <h3 class="capability-title">Lead the coordination and development of structural and services models to LOD 350-400.</h3>
         <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
@@ -1497,6 +1600,7 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
   </div>
   <div id="workModal" class="modal-overlay"><div class="modal-content"><button class="modal-close" onclick="closeModal('workModal')">&times;</button><div class="modal-header"><h3 id="workTitle" class="modal-title"></h3></div><div class="modal-body"><p id="workDesc"></p><div class="modal-video-container"><video id="workVideo" controls><source src="" type="video/mp4"></video></div></div></div></div>
   <div id="expModal" class="modal-overlay"><div class="modal-content"><button class="modal-close" onclick="closeModal('expModal')">&times;</button><div class="modal-header"><h3 id="expTitle" class="modal-title"></h3><p id="expOrg" style="color:var(--teal);font-family:var(--mono);font-size:14px;"></p></div><div class="modal-body"><p id="expDesc"></p></div></div></div>
+  <div id="buildModal" class="modal-overlay"><div class="modal-content"><button class="modal-close" onclick="closeModal('buildModal')">&times;</button><div class="modal-header"><h3 id="buildTitle" class="modal-title"></h3><p style="color:var(--teal);font-family:var(--mono);font-size:14px;">Custom Build</p></div><div class="modal-body"><p id="buildDesc"></p><a href="#connect" class="build-contact-btn" onclick="closeModal('buildModal')">Get in Touch</a></div></div></div>
 
   <footer style="padding: 32px 40px; text-align: center; border-top: 1px solid var(--border); font-size: 12px;">John Jacob Paul — Digital Construction Engineer © 2026</footer>
 
@@ -1652,6 +1756,14 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
         document.getElementById('expOrg').innerText = chip.dataset.tag;
         document.getElementById('expDesc').innerText = chip.dataset.desc;
         document.getElementById('expModal').classList.add('active');
+      }
+    });
+
+    document.querySelectorAll('.build-card').forEach(card => {
+      card.onclick = () => {
+        document.getElementById('buildTitle').innerText = card.dataset.tool;
+        document.getElementById('buildDesc').innerText = card.dataset.desc + ' This is an internal build, not publicly accessible, but I\'m happy to walk you through it.';
+        document.getElementById('buildModal').classList.add('active');
       }
     });
 
