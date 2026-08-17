@@ -491,22 +491,48 @@
     }
     .build-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
     .build-card {
-      background: rgba(21,31,46,0.4);
+      --accent: var(--teal);
+      --accent-soft: rgba(78,204,163,0.12);
+      --accent-border: rgba(78,204,163,0.4);
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      gap: 6px;
+      background: transparent;
       border: 1px solid var(--border2);
-      border-radius: 8px;
-      padding: 14px;
+      border-radius: 10px;
+      padding: 22px 16px;
       cursor: pointer;
-      transition: transform .25s, border-color .25s, background .25s;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
     }
     .build-card:hover {
       transform: translateY(-3px);
-      border-color: rgba(78,204,163,0.3);
-      background: rgba(78,204,163,0.04);
+      border-color: var(--accent-border);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.28), 0 4px 12px var(--accent-soft);
     }
-    .build-lock { width: 13px; height: 13px; color: var(--text-faint); margin-bottom: 8px; display: block; transition: color .25s; }
-    .build-card:hover .build-lock { color: var(--teal-dim); }
-    .build-name { font-family: var(--sans); font-size: 12.5px; font-weight: 600; color: var(--text); margin: 0 0 4px 0; line-height: 1.3; }
-    .build-desc { font-size: 10.5px; color: var(--text-faint); line-height: 1.4; margin: 0; }
+    .build-icon-badge {
+      width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .25s, transform .25s;
+      margin-bottom: 4px;
+    }
+    .build-icon-badge svg { width: 15px; height: 15px; stroke: var(--accent); transition: stroke .25s; }
+    .build-card:hover .build-icon-badge { background: var(--accent); transform: scale(1.08); }
+    .build-card:hover .build-icon-badge svg { stroke: #0d1117; }
+    .build-name { font-family: var(--sans); font-size: 12.5px; font-weight: 600; color: var(--text); margin: 0; line-height: 1.3; }
+    .build-desc { font-size: 10.5px; color: var(--text-faint); line-height: 1.4; margin: 0 0 6px 0; }
+    .build-card-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--mono); font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--accent);
+      background: transparent;
+      border: 1px solid var(--accent-border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: background .2s, color .2s;
+    }
+    .build-card:hover .build-card-cta { background: var(--accent); color: #0d1117; }
     .build-modal-label {
       font-family: var(--mono); font-size: 10px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .06em;
@@ -975,7 +1001,12 @@
       .capability-group-label { font-size: 9px; margin: 24px 0 12px 0; }
       .toolkit-pitch { font-size: 11px; margin: -6px 0 14px 0; }
       .build-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .build-grid .build-card:nth-child(5) { grid-column: 1 / -1; }
+      .build-card { padding: 16px 10px; gap: 5px; }
+      .build-icon-badge { width: 30px; height: 30px; margin-bottom: 2px; }
+      .build-icon-badge svg { width: 12px; height: 12px; }
+      .build-name { font-size: 11px; }
+      .build-desc { font-size: 9px; margin-bottom: 4px; }
+      .build-card-cta { font-size: 8px; padding: 5px 10px; }
       .story-stat-bridge { padding: 28px 24px; }
       .story-stat-bridge p { font-size: 13px; }
       .story-stat-num { font-size: 18px; }
@@ -1301,7 +1332,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <p class="project-desc">This is the ongoing superschool project in the northern suburbs of South Australia comprising of 4 learning centres, gym, admin centre, cultural building and a significant area of landscape and play areas. Revizto was setup in the design for coordination and collaboration between the contractor and consultants. The Digital Delivery component of this project required compliance with ISO19650 and Project Specific BIM Brief developed by the Department of Infrastructure & Transport. The design models were developed to LOD 300 making it quite reliable for Quantity Takeoffs to great extent. As the lead managing the Digital Delivery process throughout construction phase, we also setup a Revit container file to host all the discipline Revit models. To automate the process of auditing against the BIM Execution Plan, custom scripting using PyRevit was utilized to ensure consistency in grid/level alignment across the various models. PowerBI dashboards have also been setup for the job to monitor changes to the model throughout construction phase.</p>
-          <div class="project-tags"><span class="tag">Structural & Services Coordination</span><span class="tag">Automated Revit Model Audits</span><span class="tag">Model Growth Analytics</span><span class="tag">ACC Cloud Worksharing</span><span class="tag">Design Coordination</span><span class="tag">Revit & IFC Files</span><span class="tag">Reality Capture</span><span class="tag">Education</span><span class="tag">ISO19650</span><span class="tag">Revizto</span></div>
+          <div class="project-tags"><span class="tag">Structural & Services Coordination</span><span class="tag">Automated Revit Model Audits</span><span class="tag">Model Growth Analytics</span><span class="tag">Forma Data Management</span><span class="tag">Design Coordination</span><span class="tag">Revit & IFC Files</span><span class="tag">Reality Capture</span><span class="tag">Drone Deploy</span><span class="tag">Education</span><span class="tag">ISO19650</span><span class="tag">Revizto</span></div>
         </div>
       </div>
       <div class="project-card">
@@ -1401,10 +1432,9 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
   <section id="skills">
     <div class="reveal">
       <p class="section-eyebrow">Digital Capability</p>
-      <h2 class="section-title" style="margin-bottom: 16px;">Professional Expertise</h2>
+      <h2 class="section-title" style="margin-bottom: 16px;">Beyond 3D Models</h2>
     </div>
     
-    <div class="capability-group-label reveal"><span>Beyond 3D Models</span></div>
     <div class="capability-feature-grid reveal">
       <div class="capability-feature" style="--accent:#4ecca3; --accent-soft:rgba(78,204,163,0.12); --accent-border:rgba(78,204,163,0.4);" data-work-title="Revizto Issue Tracking & Management Dashboard" data-work-desc="The metadata behind the 3D model and the issue status from Revizto is exported out on a weekly basis which is automatically loaded into PowerBI. The PowerBI dashboard is setup to audit and analyze items such as Model Publish to Revizto Date, Issue Status, Clash Report, Model Growth Tracking etc. The video below shows the different items that we are tracking using PowerBI. " data-video-src="capability/powerbi.mp4">
         <div class="capability-feature-top">
@@ -1452,27 +1482,32 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
       </div>
     </div>
 
-    <p class="toolkit-pitch" style="margin-top: 28px;">A few internal tools I've built along the way. Click each card to know more.</p>
+    <div class="capability-group-label reveal" style="margin-top: 48px;"><span>Custom Builds</span></div>
+    <p class="toolkit-pitch">A few internal tools I've built along the way. Click each card to know more.</p>
     <div class="build-grid reveal">
-      <div class="build-card" data-tool="Revizto Search Set Generator" data-challenge="Building search sets manually in Revizto or Navisworks for every discipline, on every project, means rebuilding the same categorisation logic from scratch each time." data-solution="Generates batch XML search sets automatically, so coordination and clash-detection groupings are ready to import in one step instead of being built by hand.">
-        <svg class="build-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+      <div class="build-card" style="--accent:#4ecca3; --accent-soft:rgba(78,204,163,0.12); --accent-border:rgba(78,204,163,0.4);" data-tool="Revizto Search Set Generator" data-challenge="Building search sets manually in Revizto or Navisworks for every discipline, on every project, means rebuilding the same categorisation logic from scratch each time." data-solution="Generates batch XML search sets automatically, so coordination and clash-detection groupings are ready to import in one step instead of being built by hand.">
+        <div class="build-icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13.5 7l-3 10"/></svg></div>
         <h3 class="build-name">Revizto Search Set Generator</h3>
         <p class="build-desc">Generate batch XML search sets for Revizto/Navisworks.</p>
+        <span class="build-card-cta">Learn More</span>
       </div>
-      <div class="build-card" data-tool="2D Audit: Aconex vs Revizto" data-challenge="2D drawing registers can drift out of sync between the CDE (Aconex) and the coordination platform (Revizto), and catching that manually means cross-checking two systems line by line." data-solution="Compares the drawing sets in Aconex against Revizto automatically and flags mismatches, so discrepancies surface immediately instead of being found on site.">
-        <svg class="build-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+      <div class="build-card" style="--accent:#4eb8cc; --accent-soft:rgba(78,184,204,0.12); --accent-border:rgba(78,184,204,0.4);" data-tool="2D Audit: Aconex vs Revizto" data-challenge="2D drawing registers can drift out of sync between the CDE (Aconex) and the coordination platform (Revizto), and catching that manually means cross-checking two systems line by line." data-solution="Compares the drawing sets in Aconex against Revizto automatically and flags mismatches, so discrepancies surface immediately instead of being found on site.">
+        <div class="build-icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13.5 7l-3 10"/></svg></div>
         <h3 class="build-name">2D Audit: Aconex vs Revizto</h3>
         <p class="build-desc">Compare and audit 2D drawing sets between Aconex and Revizto.</p>
+        <span class="build-card-cta">Learn More</span>
       </div>
-      <div class="build-card" data-tool="Aconex Document Transmittal Tracker" data-challenge="With hundreds of transmittals moving through Aconex on a live project, keeping visibility on what's gone out, what's outstanding, and what needs a response is hard to track from within Aconex alone." data-solution="Pulls transmittal data out of Aconex into a single tracker, giving a clear, up to date view of status across the whole project without digging through the platform itself.">
-        <svg class="build-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+      <div class="build-card" style="--accent:#4e95cc; --accent-soft:rgba(78,149,204,0.12); --accent-border:rgba(78,149,204,0.4);" data-tool="Aconex Document Transmittal Tracker" data-challenge="With hundreds of transmittals moving through Aconex on a live project, keeping visibility on what's gone out, what's outstanding, and what needs a response is hard to track from within Aconex alone." data-solution="Pulls transmittal data out of Aconex into a single tracker, giving a clear, up to date view of status across the whole project without digging through the platform itself.">
+        <div class="build-icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13.5 7l-3 10"/></svg></div>
         <h3 class="build-name">Aconex Document Transmittal Tracker</h3>
         <p class="build-desc">Track and manage Aconex document transmittals across your project.</p>
+        <span class="build-card-cta">Learn More</span>
       </div>
-      <div class="build-card" data-tool="Bulk Rename File" data-challenge="Renaming large batches of files, drawings, models, exports, to match a project's naming convention is slow and error-prone when done one file at a time." data-solution="Applies custom rules and patterns to rename files in bulk, keeping naming conventions consistent across a project in a fraction of the time.">
-        <svg class="build-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+      <div class="build-card" style="--accent:#8a7ecc; --accent-soft:rgba(138,126,204,0.12); --accent-border:rgba(138,126,204,0.4);" data-tool="Bulk Rename File" data-challenge="Renaming large batches of files, drawings, models, exports, to match a project's naming convention is slow and error-prone when done one file at a time." data-solution="Applies custom rules and patterns to rename files in bulk, keeping naming conventions consistent across a project in a fraction of the time.">
+        <div class="build-icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13.5 7l-3 10"/></svg></div>
         <h3 class="build-name">Bulk Rename File</h3>
         <p class="build-desc">Batch rename files quickly and efficiently using custom rules and patterns.</p>
+        <span class="build-card-cta">Learn More</span>
       </div>
     </div>
 
@@ -1484,9 +1519,9 @@ Our client Australian Naval Infrastructure required a 6 storey office building a
         <h3 class="capability-title">Digital Delivery in accordance with ISO19650</h3>
         <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="capability-chip" data-title="Lead the design model development in accordance with the BIM Management Plan during the ECI phase." data-tag="Design Management" data-desc="Hands-on experience in design coordination during both the design and construction phases, leveraging 3D models and Bluebeam.">
+      <div class="capability-chip" data-title="Lead design development and coordination in accordance with the BIM Management Plan during the ECI phase." data-tag="Design Management" data-desc="Hands-on experience leading design development and design coordination during both the design and construction phases, leveraging 3D models and Bluebeam.">
         <div class="capability-tag">Design Management</div>
-        <h3 class="capability-title">Lead the design model development in accordance with the BIM Management Plan during the ECI phase.</h3>
+        <h3 class="capability-title">Lead design development and coordination in accordance with the BIM Management Plan during the ECI phase.</h3>
         <svg class="capability-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </div>
       <div class="capability-chip" data-title="Lead the coordination and development of structural and services models to LOD 350-400." data-tag="Construction Coordination" data-desc="Coordinating shop drawing development across structural, mechanical, electrical, hydraulic, and fire services to LOD 350-400. Structural detailing runs concurrently with design to avoid rework, while services coordination follows an agreed BIM Management Plan and clash matrix, with Revizto automating the majority of hard clashes and virtual inspections and weekly reporting closing out what's left.">
