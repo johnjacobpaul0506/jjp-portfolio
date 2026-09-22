@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>John Jacob Paul | Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Dark Theme Defaults */
+      --navy:      #0d1117;
+      --navy2:     #111827;
+      --navy3:     #1a2332;
+      --card:      #151f2e;
+      --card2:     #1e2d42;
+      --border:    #1e3a5f;
+      --border2:   #243650;
+      --teal:      #4ecca3;
+      --teal-dim:  #2aaa80;
+      --teal-faint:#1a5c47;
+      --text:      #e8edf5;
+      --text-dim:  #7a90a8;
+      --text-faint:#3a5068;
+      --sans:  'Space Grotesk', sans-serif;
+      --body:  'Inter', sans-serif;
+      --mono:  'Libre Franklin', sans-serif;
+    }
+
+    /* ── LIGHT MODE (PDF View) ── */
+    body.light-mode {
+      --navy:      #ffffff;
+      --navy2:     #f8fafc;
+      --navy3:     #f1f5f9;
+      --card:      #ffffff;
+      --card2:     #e2e8f0;
+      --border:    #c8d4e0;
+      --border2:   #d4dde8;
+      --teal:      #0e8a6a;
+      --teal-dim:  #0e7a5d;
+      --teal-faint:#0a5c45;
+      --text:      #0d1117;
+      --text-dim:  #374558;
+      --text-faint:#6b7a8d;
+    }
+
+    body.light-mode .resume-name {
+      background: none;
+      -webkit-text-fill-color: var(--text);
+      color: var(--text);
+    }
+    body.light-mode .skill-tag { background: rgba(14,138,106,0.07); border-color: rgba(14,138,106,0.2); }
+    body.light-mode .summary-text { border-color: rgba(14,138,106,0.25); border-left-color: var(--teal); }
+    body.light-mode .project-pill { border-color: rgba(14,138,106,0.25); border-left-color: var(--teal); }
+    body.light-mode .exp-note { background: rgba(14,138,106,0.04); border-color: rgba(14,138,106,0.15); }
+    body.light-mode .section-heading::after { background: var(--border); }
+
+    body {
+      background: var(--navy3);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 32px 20px 80px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── DOWNLOAD & NAV BAR ── */
+    .download-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(13,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #1e3a5f;
+    }
+    body.light-mode .download-bar {
+      background: rgba(241,245,249,0.92);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .download-bar-left { flex: 1; }
+    
+    .download-bar-center {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+      text-align: center;
+      flex: 1;
+      white-space: nowrap;
+    }
+
+    .download-bar-right {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .btn-theme {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-theme:hover {
+      background: var(--border);
+    }
+    .btn-theme svg { width: 16px; height: 16px; }
+
+    .btn-download {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      background: var(--teal);
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    body:not(.light-mode) .btn-download { color: #0d1117; }
+    
+    .btn-download:hover {
+      background: #5fddbb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(78,204,163,0.35);
+    }
+    .btn-download svg { width: 14px; height: 14px; }
+
+    /* ── RESUME SCALER (mobile zoom container) ── */
+    #resume-scaler {
+      margin: 60px auto 0;
+      width: 794px;       /* natural A4 width */
+      max-width: 100%;    /* shrinks the box on narrow viewports … */
+      overflow: visible;  /* … JS scales the child, so no clipping needed */
+    }
+
+    /* ── RESUME WRAPPER ── */
+    #resume {
+      width: 794px;       /* always full A4 — JS scales it down on mobile */
+      margin: 0;
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transform-origin: top left;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    /* ── PAGE ── */
+    .page {
+      width: 100%;
+      padding: 40px 48px;
+      min-height: 1122px; 
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .page + .page {
+      border-top: 2px dashed var(--border2);
+    }
+    .page-label {
+      position: absolute;
+      top: 12px; right: 16px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-faint);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── PDF EXPORT SPECIFIC STYLES ── */
+    #resume.pdf-exporting {
+      margin: 0 !important;
+      border: none !important;
+      border-radius: 0 !important;
+      width: 794px !important;
+      max-width: none !important;
+    }
+    #resume.pdf-exporting .page {
+      /* Let the page render at its natural height so the footer is never clipped.
+         The JS capture step scales each canvas to fit the PDF page exactly. */
+      min-height: 1122px !important;
+    }
+    #resume.pdf-exporting .page + .page {
+      border-top: none !important;
+    }
+    #resume.pdf-exporting .page-break {
+      page-break-before: always !important; /* Explicit CSS page break for the engine */
+    }
+    body.pdf-exporting-body {
+      background: #ffffff !important;
+    }
+
+    /* ── HEADER ── */
+    .resume-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 22px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .resume-name {
+      font-family: var(--sans);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(90deg, #4ecca3 0%, #a8f0da 55%, #e8edf5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+    .resume-title {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--teal-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .contact-item svg {
+      width: 11px; height: 11px;
+      color: var(--teal);
+      flex-shrink: 0;
+    }
+    .contact-item a {
+      color: var(--text-dim);
+      text-decoration: none;
+    }
+    .contact-item a:hover { color: var(--teal); }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .qr-wrapper {
+      width: 80px; height: 80px;
+      border: 1px solid rgba(78,204,163,0.3);
+      border-radius: 4px;
+      padding: 4px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr-wrapper img { width: 100%; height: 100%; }
+    .qr-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .qr-url {
+      font-family: var(--mono);
+      font-size: 7.5px;
+      color: var(--teal);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .qr-url:hover { color: #5fddbb; text-decoration: underline; }
+    body.light-mode .qr-url:hover { color: #0b6b52; }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 18px; }
+    #referees-section { margin-bottom: 0; }
+    .section-heading {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--teal);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── SUMMARY ── */
+    .summary-text {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      padding: 14px 18px;
+      border: 1px solid rgba(78,204,163,0.18);
+      border-left: 3px solid var(--teal);
+      border-radius: 4px;
+    }
+
+    /* ── EXPERIENCE ENTRY ── */
+    .exp-entry { margin-bottom: 18px; }
+    .exp-entry:last-child { margin-bottom: 0; }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3px;
+    }
+    .exp-title {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .exp-dates {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--teal);
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+    .exp-org {
+      font-size: 11.5px;
+      color: var(--teal-dim);
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .exp-note {
+      font-size: 11px;
+      color: var(--text-faint);
+      margin-bottom: 7px;
+      padding: 5px 10px;
+      background: rgba(78,204,163,0.04);
+      border: 1px solid rgba(78,204,163,0.1);
+      border-radius: 3px;
+      font-style: italic;
+    }
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .bullet-list li {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.55;
+      padding-left: 14px;
+      position: relative;
+    }
+    .bullet-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .project-pill {
+      border: 1px solid rgba(78,204,163,0.2);
+      border-left: 3px solid var(--teal);
+      border-radius: 4px;
+      padding: 10px 12px;
+    }
+    .project-pill-name {
+      font-family: var(--sans);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .project-pill-meta {
+      font-size: 10px;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+    .project-link {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 9px;
+      font-family: var(--mono);
+      color: var(--teal);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .project-link:hover {
+      color: #5fddbb;
+    }
+    body.light-mode .project-link:hover {
+      color: #0b6b52;
+    }
+
+    /* ── SKILLS GRID ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .skill-group-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--teal-dim);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .skill-tag {
+      font-size: 10px;
+      color: var(--text-dim);
+      background: rgba(78,204,163,0.06);
+      border: 1px solid rgba(78,204,163,0.15);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── EDUCATION ── */
+    .edu-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .edu-entry:last-child { margin-bottom: 0; }
+    .edu-degree {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .edu-inst {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    /* ── REFEREE CARDS ── */
+    .ref-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .ref-card {
+      background: none;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    body.light-mode .ref-card {}
+    .ref-name     { font-size: 11.5px; font-weight: 600; color: var(--text); }
+    .ref-position { font-size: 10.5px; color: var(--teal); }
+    .ref-org      { font-size: 10.5px; color: var(--text-faint); }
+    .ref-detail {
+      font-size: 10px;
+      color: var(--text-faint);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+    .ref-detail svg  { flex-shrink: 0; stroke: var(--teal); }
+    .ref-detail a    { color: var(--text-faint); text-decoration: none; }
+    .ref-detail a:hover { color: var(--teal); }
+    .ref-on-request { font-size: 11.5px; color: var(--text-faint); font-style: italic; }
+    .edu-dates {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--teal);
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 18px 0;
+    }
+
+    /* ── PAGE FOOTER ── */
+    .page-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .page-footer-name {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-faint);
+    }
+    .page-footer-url {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--teal-faint);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── PDF EXPORT SVG FIX ── */
+    /* html2canvas cannot resolve currentColor from CSS; stamp explicit colours */
+    #resume.pdf-exporting .contact-item svg {
+      stroke: #0e8a6a !important;
+      color: #0e8a6a !important;
+    }
+    #resume.pdf-exporting .bullet-list li::before {
+      color: #0e8a6a !important;
+    }
+
+    /* ── PRINT / PDF ── */
+    /* ── MOBILE ── */
+    @media (max-width: 860px) {
+      body { padding-left: 0; padding-right: 0; }
+
+      /* Collapse the empty left spacer so the label + buttons share the bar */
+      .download-bar-left { display: none; }
+      .download-bar-center { text-align: left; font-size: 10px; }
+      .download-bar { padding: 10px 14px; gap: 8px; }
+      .btn-download { padding: 8px 14px; font-size: 10px; }
+    }
+
+    @media print {
+      body { background: var(--navy); padding: 0; }
+      .download-bar { display: none; }
+      #resume { margin: 0; border: none; border-radius: 0; max-width: 100%; }
+      .page { padding: 36px 44px; min-height: auto; height: auto; }
+      .page + .page { border-top: none; page-break-before: always; }
+      .page-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DOWNLOAD BAR -->
+  <div class="download-bar">
+    <div class="download-bar-left"></div>
+    <div class="download-bar-center">Resume · John Jacob Paul</div>
+    <div class="download-bar-right">
+      <button class="btn-theme" onclick="toggleTheme()" title="Toggle Theme (Light / Dark Mode)">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Sun Icon default because site defaults to dark -->
+          <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+      <button class="btn-download" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- RESUME -->
+  <div id="resume-scaler">
+  <div id="resume">
+
+    <!-- PAGE 1 -->
+    <div class="page">
+      <span class="page-label">Page 1 of 2</span>
+
+      <!-- HEADER -->
+      <div class="resume-header">
+        <div class="header-left">
+          <div class="resume-name">John Jacob Paul</div>
+          <div class="resume-title">Senior Digital Coordinator | BIM & Digital Construction</div>
+          <div class="contact-row">
+            <div class="contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.79 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-.59a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 15.92z"/></svg>
+              0466 536 199
+            </div>
+            <div class="contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:johnjacobpaul0506@gmail.com">johnjacobpaul0506@gmail.com</a>
+            </div>
+            <div class="contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <a href="https://www.linkedin.com/in/john-jacob-paul-480b07126/" target="_blank">linkedin.com/in/john-jacob-paul</a>
+            </div>
+            <div class="contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 00-8 8c0 5.25 8 13 8 13s8-7.75 8-13a8 8 0 00-8-8z"/></svg>
+              Adelaide, SA
+            </div>
+          </div>
+        </div>
+        <div class="header-right">
+          <a href="https://jjp-build.vercel.app" target="_blank" style="display:block;line-height:0;">
+            <div class="qr-wrapper" id="qrcode"></div>
+          </a>
+          <div class="qr-label">Portfolio</div>
+          <a href="https://jjp-build.vercel.app" target="_blank" class="qr-url">jjp-build.vercel.app</a>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="section">
+        <div class="section-heading">Professional Summary</div>
+        <div class="summary-text">
+          Seasoned Digital Coordinator with over 5 years in the Australian construction industry, backed by 2 years of international experience. Skilled in BIM, digital engineering, and construction automation, with a strong focus on improving design management and project coordination through practical, data-driven workflows across commercial and Defence infrastructure programs. Experienced in delivering ISO 19650-compliant digital environments across complex, multi-discipline projects including work with Australian Naval Infrastructure. Currently contributing to innovation at Sarah Constructions while supporting future industry professionals as a Guest Lecturer at University of Adelaide.
+        </div>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="section">
+        <div class="section-heading">Experience</div>
+
+        <!-- Sarah Constructions -->
+        <div class="exp-entry">
+          <div class="exp-header">
+            <div class="exp-title">Senior Digital Coordinator</div>
+            <div class="exp-dates"> Apr 2021 - Present</div>
+          </div>
+          <div class="exp-org">Sarah Constructions | Adelaide, SA</div>
+          <div class="exp-note">Joined as Site Assistant in final year of university. Transitioned to Graduate upon degree completion — awarded the Sarah Graduate Scholarship Grant. Progressively promoted to Coordinator and then Senior Digital Coordinator within the Digital Division.</div>
+          <ul class="bullet-list">
+            <li>Author and maintain BIM Execution Plans (BEPs) and Common Data Environments (CDEs) in accordance with ISO 19650, establishing structured digital delivery workflows across design and construction phases.</li>
+            <li>Coordinate structural shop detailing alongside design development, delivering LOD400 fabrication-ready models by the end of the design phase and improving programme efficiency through early cross-discipline coordination.</li>
+            <li>Lead multidisciplinary building services coordination across mechanical, electrical, hydraulic, and fire services using Revizto, including clash detection, issue tracking, responsibility assignment, and virtual inspection workflows.</li>
+            <li>Lead quantity takeoff and model-based estimation workflows by extracting data from Revit and Revizto to support live bill of quantities tracking and cost reporting through Power BI.</li>
+            <li>Built Power BI dashboards connected to weekly Revizto/Revit exports, tracking model growth, clash status, issue resolution trends, and quantity changes over time.</li>
+            <li>Developed and implemented a custom pyRevit add-in to automate model auditing, data extraction, and shared parameter management across project teams.</li>
+            <li>Conduct CASA-compliant drone operations; process imagery in Agisoft Metashape to produce georeferenced point clouds and orthomosaics for as-built validation.</li>
+            <li>Manage 360° reality capture workflows via Cupix and DroneDeploy for spatial validation against the coordinated 3D model throughout construction.</li>
+          </ul>
+          <!-- Key Projects embedded -->
+          <div style="margin-top: 12px;">
+            <div style="font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--teal-dim); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 7px;">Key Projects</div>
+            <div class="projects-grid">
+              <div class="project-pill">
+                <div class="project-pill-name">New Northern Suburbs High Schools | 155M</div>
+                <div class="project-pill-meta">Client - Department for Infrastructure & Transport</div>
+                <a href="https://jjp-build.vercel.app/#projects" target="_blank" class="project-link">Click to read more</a>
+              </div>
+              <div class="project-pill">
+                <div class="project-pill-name">Culturual Institutions Storage Facility | 65M</div>
+                <div class="project-pill-meta">Client - Department for Infrastructure & Transport</div>
+                <a href="https://jjp-build.vercel.app/#projects" target="_blank" class="project-link">Click to read more</a>
+              </div>
+              <div class="project-pill">
+                <div class="project-pill-name">ANI Towers & Storage Facility | 45M </div>
+                <div class="project-pill-meta">Client - Australian Naval Infrastructure</div>
+                <a href="https://jjp-build.vercel.app/#projects" target="_blank" class="project-link">Click to read more</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- CORE COMPETENCIES -->
+        <div style="margin-top: 6px;">
+          <div style="font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--teal-dim); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 7px;">Core Ecosystem</div>
+          <div class="skill-tags" style="gap: 6px;">
+            <span class="skill-tag">Revizto</span>
+            <span class="skill-tag">Revit</span>
+            <span class="skill-tag">Autodesk Forma</span>
+            <span class="skill-tag">Navisworks</span>
+            <span class="skill-tag">Aconex</span>
+            <span class="skill-tag">Drone Deploy</span>
+            <span class="skill-tag">Cupix</span>
+            <span class="skill-tag">Bluebeam</span>
+            <span class="skill-tag">Pyrevit</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-footer">
+        <span class="page-footer-name">John Jacob Paul</span>
+        <span class="page-footer-url">0466 536 199</span>
+      </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page page-break">
+      <span class="page-label">Page 2 of 2</span>
+
+      <!-- EXPERIENCE CONTINUED -->
+      <div class="section">
+        <div class="section-heading">Experience (Continued)</div>
+
+        <!-- Guest Lecturer -->
+        <div class="exp-entry">
+          <div class="exp-header">
+            <div class="exp-title">Guest Lecturer & Teaching Demonstrator</div>
+            <div class="exp-dates">Aug 2021 - Present</div>
+          </div>
+          <div class="exp-org">Adelaide University (Contract Job) | Adelaide, SA</div>
+          <ul class="bullet-list">
+            <li>Appointed as a Teaching Demonstrator for the Building Services & Environment course at The University of Adelaide following completion of Master’s studies, in recognition of strong academic performance and industry experience gained at Sarah Constructions. This later evolved into an invited Guest Lecturer role, delivering lectures on Digital Construction topics that bridged contemporary industry practice with academic curriculum.</li>
+          </ul>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Astel Homes -->
+        <div class="exp-entry">
+          <div class="exp-header">
+            <div class="exp-title">Project Officer</div>
+            <div class="exp-dates">Dec 2020 - Apr 2021</div>
+          </div>
+          <div class="exp-org">Astel Homes (Part-time) | Adelaide, SA</div>
+          <ul class="bullet-list">
+            <li>Streamlined pre-construction operations by coordinating with clients, architects, and engineers to facilitate planning consent and development approvals.</li>
+            <li>Liaised with material suppliers and subcontractors to obtain competitive quotes and build long-term trade relationships.</li>
+            <li>Created and maintained a project database tracking stakeholder details, timelines, and cost data within the Buildertrend project management platform.</li>
+            <li>Prepared cost estimates for renovation projects and produced status reports for the construction manager.</li>
+          </ul>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Sobha Limited -->
+        <div class="exp-entry">
+          <div class="exp-header">
+            <div class="exp-title">Planning Engineer</div>
+            <div class="exp-dates">Dec 2017 — Apr 2019</div>
+          </div>
+          <div class="exp-org">Sobha Limited | India</div>
+          <ul class="bullet-list">
+            <li>Developed and maintained master project schedules for high-rise residential and mixed-use developments, tracking milestones and critical path activities.</li>
+            <li>Monitored construction progress against baseline programmes, identified schedule variances, and coordinated recovery plans with site and procurement teams.</li>
+            <li>Prepared weekly and monthly progress reports for senior management and client stakeholders, including quarterly materials and resourcing forecast.</li>
+            <li>Coordinated across design, procurement, and construction teams to align project planning with resource availability and material delivery timelines.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="section">
+        <div class="section-heading">Education</div>
+        <div class="edu-entry">
+          <div>
+            <div class="edu-degree">Master of Construction Management</div>
+            <div class="edu-inst">University of Adelaide · Adelaide, SA</div>
+          </div>
+          <div class="edu-dates">Jul 2019 — Jul 2021</div>
+        </div>
+        <div class="edu-entry">
+          <div>
+            <div class="edu-degree">Bachelor of Technology — Civil Engineering</div>
+            <div class="edu-inst">National Institute of Technology (NIT) · India</div>
+          </div>
+          <div class="edu-dates">2013 — 2017</div>
+        </div>
+      </div>
+
+      <!-- REFEREES -->
+      <div class="section" id="referees-section">
+        <div class="section-heading">Referees</div>
+        <div id="referees-container"></div>
+      </div>
+
+      <div class="page-footer">
+        <span class="page-footer-name">John Jacob Paul</span>
+        <span class="page-footer-url">0466 536 199</span>
+      </div>
+    </div>
+
+  </div><!-- /resume -->
+  </div><!-- /resume-scaler -->
+
+  <script>
+    // ╔══════════════════════════════════════════════════════════════╗
+    // ║  REFERENCES CONFIG  —  edit only this block                 ║
+    // ╠══════════════════════════════════════════════════════════════╣
+    // ║  SHOW_REFERENCES = true  → displays full referee cards      ║
+    // ║  SHOW_REFERENCES = false → shows "Available on request"     ║
+    // ╚══════════════════════════════════════════════════════════════╝
+    const SHOW_REFERENCES = false;
+
+    const REFERENCES = [
+      {
+        name:     "Carol Mathai",
+        position: "Civil Engineer | AECOM",
+        email:    "carol.mathai@aecom.com",
+        phone:    "0422 708 934 "
+      },
+{
+        name:     "Alex Willshire",
+        position: "Digital Manager | Sarah Constructions",
+        email:    "alex.willshire@sarah.com.au",
+        phone:    "0422 708 934 "
+      }
+    ];
+    // ── END REFERENCES CONFIG ─────────────────────────────────────
+
+    (function renderReferees() {
+      const container = document.getElementById('referees-container');
+      if (!container) return;
+
+      if (!SHOW_REFERENCES) {
+        container.innerHTML = '<p class="ref-on-request">Available on request.</p>';
+        return;
+      }
+
+      const phoneIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.79 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-.59a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 15.92z"/></svg>`;
+      const emailIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`;
+
+      const cards = REFERENCES.map(r => `
+        <div class="ref-card">
+          <div class="ref-name">${r.name}</div>
+          <div class="ref-position">${r.position}</div>
+          <div class="ref-detail">${phoneIcon} ${r.phone}</div>
+          <div class="ref-detail">${emailIcon} <a href="mailto:${r.email}">${r.email}</a></div>
+        </div>`).join('');
+
+      container.innerHTML = `<div class="ref-grid">${cards}</div>`;
+    })();
+
+    // ── THEME TOGGLE ──
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const icon = document.getElementById('theme-icon');
+      
+      if (document.body.classList.contains('light-mode')) {
+        // Moon icon for switching back to Dark Mode
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>';
+      } else {
+        // Sun icon for switching to Light Mode
+        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      }
+    }
+
+    // ── QR CODE ──
+    new QRCode(document.getElementById("qrcode"), {
+      text: "https://jjp-build.vercel.app",
+      width: 72,
+      height: 72,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // ── DOWNLOAD PDF ──
+    // Renders each .page div as an individual html2canvas capture, then
+    // stitches the captures into a multi-page jsPDF document.
+    // This is far more reliable than html2pdf.js's single-canvas + CSS-break approach.
+    async function downloadPDF() {
+      const btn = document.querySelector('.btn-download');
+      btn.innerHTML = 'Generating...';
+      btn.disabled = true;
+
+      const resume   = document.getElementById('resume');
+      const pages    = Array.from(document.querySelectorAll('#resume .page'));
+      const labels   = document.querySelectorAll('.page-label');
+      const svgs     = document.querySelectorAll('#resume .contact-item svg');
+      const wasLight = document.body.classList.contains('light-mode');
+
+      // 1. Apply export state
+      document.body.classList.add('light-mode', 'pdf-exporting-body');
+      resume.classList.add('pdf-exporting');
+      labels.forEach(el => el.style.display = 'none');
+
+      // 2. Strip any mobile scale transform so html2canvas captures the full
+      //    794px layout, not the viewport-scaled version.
+      const scaler        = document.getElementById('resume-scaler');
+      const savedTransform     = resume.style.transform;
+      const savedScalerHeight  = scaler.style.height;
+      resume.style.transform   = '';
+      scaler.style.height      = '';
+
+      // 3. Stamp explicit stroke on SVG icons so html2canvas can paint them.
+      //    (html2canvas cannot resolve currentColor from a CSS color property.)
+      svgs.forEach(svg => svg.setAttribute('stroke', '#0e8a6a'));
+
+      // 4. Give the browser one frame to apply the new styles before capturing
+      await new Promise(r => setTimeout(r, 120));
+
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ unit: 'px', format: [794, 1122], orientation: 'portrait', compress: true });
+
+        for (let i = 0; i < pages.length; i++) {
+          if (i > 0) pdf.addPage([794, 1122], 'portrait');
+
+          const canvas = await html2canvas(pages[i], {
+            scale: 2,                 // 2× for crisp text
+            useCORS: true,
+            allowTaint: false,
+            backgroundColor: '#ffffff',
+            logging: false,
+            windowWidth: 794
+          });
+
+          // Scale the captured image to fill the PDF page width (794px).
+          // If the page content is slightly taller than 1122px (e.g. footer pushed
+          // past the boundary), scale-to-fit ensures nothing is ever clipped.
+          const pdfW     = 794;
+          const pdfH     = 1122;
+          const naturalW = canvas.width  / 2; // divide by devicePixel scale (2×)
+          const naturalH = canvas.height / 2;
+          const fitScale = Math.min(pdfW / naturalW, pdfH / naturalH);
+          const imgW     = naturalW * fitScale;
+          const imgH     = naturalH * fitScale;
+          const offsetX  = (pdfW - imgW) / 2;
+          const offsetY  = (pdfH - imgH) / 2;
+
+          const imgData = canvas.toDataURL('image/jpeg', 1.0);
+          pdf.addImage(imgData, 'JPEG', offsetX, offsetY, imgW, imgH);
+
+          // Re-stamp hyperlinks as PDF annotations.
+          // html2canvas flattens everything to pixels, so we overlay link rectangles
+          // by mapping each <a> element's DOM position into PDF coordinate space.
+          const pageRect = pages[i].getBoundingClientRect();
+          pages[i].querySelectorAll('a[href]').forEach(anchor => {
+            const r    = anchor.getBoundingClientRect();
+            // Coordinates relative to the top-left of this page div
+            const relX = r.left - pageRect.left;
+            const relY = r.top  - pageRect.top;
+            // Apply the same fitScale used for the image, plus any centering offset
+            const pdfX = offsetX + relX * fitScale;
+            const pdfY = offsetY + relY * fitScale;
+            const pdfW = r.width  * fitScale;
+            const pdfH = r.height * fitScale;
+            pdf.link(pdfX, pdfY, pdfW, pdfH, { url: anchor.getAttribute('href') });
+          });
+        }
+
+        pdf.save('John_Jacob_Paul_Resume.pdf');
+
+      } catch (err) {
+        console.error('PDF generation failed:', err);
+        alert('PDF generation failed — please try again.');
+      } finally {
+        // 5. Restore everything regardless of success/failure
+        svgs.forEach(svg => svg.setAttribute('stroke', 'currentColor'));
+        resume.classList.remove('pdf-exporting');
+        document.body.classList.remove('pdf-exporting-body');
+        labels.forEach(el => el.style.display = '');
+        if (!wasLight) document.body.classList.remove('light-mode');
+        // Re-apply mobile scale if it was active before export
+        resume.style.transform  = savedTransform;
+        scaler.style.height     = savedScalerHeight;
+
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF`;
+        btn.disabled = false;
+      }
+    }
+
+    // ── MOBILE SCALE ──
+    // Scales #resume (fixed 794px wide) to fit the viewport on mobile.
+    // CSS transform doesn't affect layout flow, so we manually set the
+    // scaler's height to match the scaled resume height.
+    function updateResumeScale() {
+      const scaler = document.getElementById('resume-scaler');
+      const resume = document.getElementById('resume');
+      const available = scaler.clientWidth;   // viewport width (minus any padding)
+      const natural   = 794;
+      const scale     = Math.min(1, available / natural);
+
+      if (scale < 1) {
+        resume.style.transform = `scale(${scale})`;
+        // Compensate layout height — transform doesn't shrink the flow box
+        scaler.style.height = (resume.scrollHeight * scale) + 'px';
+      } else {
+        resume.style.transform = '';
+        scaler.style.height    = '';
+      }
+    }
+
+    window.addEventListener('resize', updateResumeScale);
+    // Run after fonts + QR code have rendered so scrollHeight is accurate
+    window.addEventListener('load', updateResumeScale);
+  </script>
+</body>
+</html>
