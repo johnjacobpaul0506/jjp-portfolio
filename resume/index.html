@@ -474,6 +474,16 @@
       gap: 5px;
       padding-left: 6px;
     }
+    /* 5 equal columns so both rows line up (10 tags = 2 rows of 5) */
+    .skill-tags.eco-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .skill-tags.eco-grid .skill-tag.has-logo {
+      display: flex;
+      white-space: nowrap;
+      min-width: 0;
+    }
     .skill-logo {
       width: 12px;
       height: 12px;
@@ -657,11 +667,11 @@
           </div>
         </div>
         <div class="header-right">
-          <a href="https://jjp-build.vercel.app" target="_blank" style="display:block;line-height:0;">
+          <a href="https://jjp-digital.vercel.app" target="_blank" style="display:block;line-height:0;">
             <div class="qr-wrapper" id="qrcode"></div>
           </a>
           <div class="qr-label">Portfolio</div>
-          <a href="https://jjp-build.vercel.app" target="_blank" class="qr-url">jjp-build.vercel.app</a>
+          <a href="https://jjp-digital.vercel.app" target="_blank" class="qr-url">jjp-digital.vercel.app</a>
         </div>
       </div>
 
@@ -723,7 +733,7 @@
         <!-- CORE COMPETENCIES -->
         <div style="margin-top: 6px;">
           <div style="font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--teal-dim); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 7px;">Core Ecosystem</div>
-          <div class="skill-tags" style="gap: 6px;">
+          <div class="skill-tags eco-grid" style="gap: 6px;">
             <span class="skill-tag has-logo"><img class="skill-logo" src="../logos/revizto.png" alt="" width="12" height="12">Revizto</span>
             <span class="skill-tag has-logo"><img class="skill-logo" src="../logos/revit.png" alt="" width="12" height="12">Revit</span>
             <span class="skill-tag has-logo"><img class="skill-logo" src="../logos/acc.png" alt="" width="12" height="12">Autodesk Forma</span>
@@ -732,6 +742,7 @@
             <span class="skill-tag has-logo"><img class="skill-logo" src="../logos/dronedeploy.png" alt="" width="12" height="12">Drone Deploy</span>
             <span class="skill-tag has-logo"><img class="skill-logo" src="../logos/cupix.jpg" alt="" width="12" height="12">Cupix</span>
             <span class="skill-tag has-logo"><img class="skill-logo" src="../logos/bluebeam.png" alt="" width="12" height="12">Bluebeam</span>
+            <span class="skill-tag has-logo"><img class="skill-logo" src="../logos/powerbi.jpg" alt="" width="12" height="12">Power BI</span>
             <span class="skill-tag has-logo"><img class="skill-logo" src="../logos/pyrevit.jpg" alt="" width="12" height="12">Pyrevit</span>
           </div>
         </div>
@@ -896,7 +907,7 @@
 
     // ── QR CODE ──
     new QRCode(document.getElementById("qrcode"), {
-      text: "https://jjp-build.vercel.app",
+      text: "https://jjp-digital.vercel.app",
       width: 72,
       height: 72,
       colorDark: "#000000",
